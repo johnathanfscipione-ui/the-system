@@ -24,6 +24,10 @@ h1{font-size:27px;margin:4px 0 0}.sub{font-size:11px;color:var(--muted);margin:3
 .listrow{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #182743}.listrow:last-child{border-bottom:0}.icon{font-size:20px}.grow{flex:1}.muted{font-size:9px;color:var(--muted)}.gold{color:var(--gold)}
 .modal{position:fixed;z-index:10;inset:0;background:#02040bdd;display:none;place-items:center;padding:22px}.modal.show{display:grid}.modalbox{width:min(430px,100%);padding:25px;border-radius:18px;border:1px solid #4e72b1;background:linear-gradient(145deg,#101b37,#070a14);box-shadow:0 0 80px #3c75ff2b;text-align:center}.modalbox .sys{font-size:9px}.modalbox h2{font-size:26px;margin:10px 0 5px}.modalbox p{font-size:12px;color:#a6b5d0;line-height:1.5}.modalbox button{margin-top:8px;width:100%;padding:12px;border-radius:9px;border:1px solid #3c62a0;background:#0d2347;color:white;font-weight:800}
 input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;background:#060a13;color:white;outline:none;margin:5px 0}label{font-size:10px;color:#9cafcf}
+
+.confirmBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.confirmBtns button:first-child{background:linear-gradient(90deg,#123d36,#0b2b28);border-color:#327b68}.confirmBtns button:last-child{background:#080e1b;border-color:#394967}
+.intro{position:fixed;z-index:20;inset:0;background:radial-gradient(circle at 50% 25%,#173b68,#070b17 50%,#010207);display:none;place-items:center;padding:28px}.intro.show{display:grid}.introbox{max-width:430px;text-align:center}.sigil{width:88px;height:88px;margin:0 auto 20px;border:1px solid #4e8dca;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);display:grid;place-items:center;background:#071329;box-shadow:0 0 50px #42d9ff33;color:var(--cyan);font-size:30px}.intro .sys{font-size:10px}.intro h1{font-size:36px;letter-spacing:6px}.intro p{color:#a8b8d3;line-height:1.6;font-size:13px}.glitch{animation:pulse 1.8s infinite}@keyframes pulse{50%{opacity:.55;filter:drop-shadow(0 0 12px #5de7ff)}}
+.herochar{border:1px solid #35558a;border-radius:15px;padding:20px;text-align:center;background:radial-gradient(circle at 50% 20%,#1c3161,#080c18 70%);margin-bottom:12px}.avatar{font-size:58px;margin:4px}.title{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:900}
 </style>
 </head>
 <body>
@@ -44,7 +48,8 @@ input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;backgro
 </section>
 
 <section id="character" class="screen">
-<div class="panel"><div class="sys">PLAYER STATUS</div><h1>THE AWAKENED</h1><div class="sub">Every completed task contributes to your evolution.</div>
+<div class="herochar"><div class="avatar" id="avatar">⚔️</div><div class="title">CURRENT CLASS</div><h1 id="className">UNAWAKENED</h1><div class="sub" id="classDesc">Your true class has not yet been revealed.</div></div>
+<div class="panel"><div class="sys">PLAYER STATUS</div><h1 id="statusLevel">LEVEL 1</h1><div class="sub">Every completed task contributes to your evolution.</div>
 <div class="listrow"><span class="icon">⚔️</span><div class="grow"><b>Strength</b><div class="muted">Physical training & action</div></div><strong id="cstr">10</strong></div>
 <div class="listrow"><span class="icon">🧠</span><div class="grow"><b>Intelligence</b><div class="muted">Study & learning</div></div><strong id="cint">10</strong></div>
 <div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Discipline</b><div class="muted">Consistency & difficult tasks</div></div><strong id="cdis">10</strong></div>
@@ -74,6 +79,9 @@ input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;backgro
 <div id="modal" class="modal"><div class="modalbox"><div class="sys">SYSTEM NOTIFICATION</div><h2 id="modalTitle"></h2><p id="modalText"></p><button onclick="closeModal()">CONTINUE</button></div></div>
 <div id="createModal" class="modal"><div class="modalbox"><div class="sys">NEW SYSTEM TASK</div><h2>CREATE QUEST</h2><label>Task name</label><input id="newName" placeholder="e.g. Study calculus"><label>XP reward (10–500)</label><input id="newXP" type="number" value="50" min="10" max="500"><button onclick="createTask()">ADD TO SYSTEM</button><button class="btn secondary" onclick="closeCreate()">CANCEL</button></div></div>
 
+
+<div id="confirmModal" class="modal"><div class="modalbox"><div class="sys">SYSTEM TASK VERIFICATION</div><h2>IS THIS TASK COMPLETE?</h2><p id="confirmText"></p><div class="confirmBtns"><button onclick="confirmTask()">YES — COMPLETE</button><button onclick="cancelTask()">NOT YET</button></div></div></div>
+<div id="intro" class="intro"><div class="introbox"><div class="sigil glitch">✦</div><div class="sys">SYSTEM CONNECTION ESTABLISHED</div><h1>AWAKEN</h1><p>A system has appeared before you. It does not care who you were yesterday. It only measures what you do next.</p><button class="btn" onclick="finishIntro()">ACCEPT THE SYSTEM</button></div></div>
 <script>
 const KEY="life-system-v1";
 const starter=[
@@ -82,8 +90,9 @@ const starter=[
 {id:3,name:"Reset your environment",desc:"Clean or organize for 15+ minutes",xp:50,stat:"dis",emoji:"🧹"},
 {id:4,name:"Hit your hydration goal",desc:"Complete your planned water target",xp:30,stat:"dis",emoji:"💧"},
 {id:5,name:"Protect your sleep",desc:"Get to bed at your target time",xp:75,stat:"dis",emoji:"😴"}];
+let pendingTask=null;
 let state=JSON.parse(localStorage.getItem(KEY)||"null");
-if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[]};
+if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -98,11 +107,14 @@ document.getElementById("xpText").textContent=state.xp+" / "+xpNeeded()+" XP";
 document.getElementById("xpFill").style.width=Math.min(100,state.xp/xpNeeded()*100)+"%";
 for(const k of ["str","int","dis"]){document.getElementById(k).textContent=state.stats[k];document.getElementById("c"+k).textContent=state.stats[k]}
 document.getElementById("coins").textContent=state.coins.toLocaleString();
+document.getElementById("statusLevel").textContent="LEVEL "+state.level;
+let cls=state.level>=10?["SHADOW HUNTER","🌑","The System has recognized a hunter-type path."]:state.level>=5?["AWAKENED","⚡","Your potential is beginning to manifest."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
+document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
 document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
 document.getElementById("streakText").textContent=state.streak+" DAYS";
 document.getElementById("streakBig").textContent=state.streak;
 const q=document.getElementById("questList");q.innerHTML="";
-state.tasks.forEach(t=>{let done=state.completed[t.id]===today();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"Custom System Task")}</small></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>complete(t);q.appendChild(el)});
+state.tasks.forEach(t=>{let done=state.completed[t.id]===today();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"Custom System Task")}</small></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>openConfirm(t);q.appendChild(el)});
 const a=document.getElementById("achList");const achievements=[
 ["FIRST AWAKENING","Complete your first task","first",state.xp>0],
 ["QUEST CLEARER","Clear 5 tasks","five",Object.keys(state.completed).length>=5],
@@ -117,7 +129,7 @@ if(state.completed[t.id]===today())return;
 const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/5));state.stats[t.stat||"dis"]++;
 const prev=state.lastDay;const d=today();if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
 while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++}
-save();render();
+save();render();if(!state.introSeen)document.getElementById("intro").classList.add("show");
 if(state.level>oldLevel)show("LEVEL UP","You have reached Level "+state.level+". New power has been recognized by the System.");
 else show("QUEST CLEARED","+"+t.xp+" XP  •  +"+Math.max(1,Math.round(t.xp/5))+" 🪙");
 }
