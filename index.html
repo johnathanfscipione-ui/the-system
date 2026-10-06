@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM</title>
+<title>THE SYSTEM // V3</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -92,6 +92,7 @@ const starter=[
 {id:5,name:"Protect your sleep",desc:"Get to bed at your target time",xp:75,stat:"dis",emoji:"😴"}];
 let pendingTask=null;
 let state=JSON.parse(localStorage.getItem(KEY)||"null");
+if(state && typeof state.introSeen==="undefined") state.introSeen=false;
 if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false};
 
 function today(){return new Date().toISOString().slice(0,10)}
@@ -124,13 +125,37 @@ const a=document.getElementById("achList");const achievements=[
 a.innerHTML=achievements.map(x=>`<div class="listrow"><span class="icon">${x[3]?"🏆":"🔒"}</span><div class="grow"><b>${x[0]}</b><div class="muted">${x[1]}</div></div><strong>${x[3]?"UNLOCKED":"LOCKED"}</strong></div>`).join("");
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function openConfirm(t){
+  pendingTask=t;
+  document.getElementById("confirmText").textContent='The System is asking you to verify: "'+t.name+'".';
+  document.getElementById("confirmModal").classList.add("show");
+}
+function cancelTask(){
+  pendingTask=null;
+  document.getElementById("confirmModal").classList.remove("show");
+}
+function confirmTask(){
+  if(!pendingTask)return;
+  const t=pendingTask;
+  pendingTask=null;
+  document.getElementById("confirmModal").classList.remove("show");
+  complete(t);
+}
+function finishIntro(){
+  state.introSeen=true;
+  save();
+  document.getElementById("intro").classList.remove("show");
+}
 function complete(t){
 if(state.completed[t.id]===today())return;
 const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/5));state.stats[t.stat||"dis"]++;
 const prev=state.lastDay;const d=today();if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
 while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++}
 save();render();if(!state.introSeen)document.getElementById("intro").classList.add("show");
-if(state.level>oldLevel)show("LEVEL UP","You have reached Level "+state.level+". New power has been recognized by the System.");
+if(state.level>oldLevel){
+  show("LEVEL UP","LEVEL "+state.level+" ACHIEVED. Your character status has evolved.");
+  setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),650);
+}
 else show("QUEST CLEARED","+"+t.xp+" XP  •  +"+Math.max(1,Math.round(t.xp/5))+" 🪙");
 }
 function createTask(){let n=document.getElementById("newName").value.trim();let x=Math.max(10,Math.min(500,Number(document.getElementById("newXP").value)||50));if(!n)return;let id=Date.now();state.tasks.push({id,name:n,desc:"Custom System Task",xp:x,stat:"dis",emoji:"⚔️"});save();closeCreate();render();show("SYSTEM TASK ADDED",n+" has been added to today's System.")}
@@ -141,6 +166,7 @@ function closeModal(){document.getElementById("modal").classList.remove("show")}
 function openCreate(){document.getElementById("createModal").classList.add("show")}
 function closeCreate(){document.getElementById("createModal").classList.remove("show")}
 render();
+if(!state.introSeen)document.getElementById("intro").classList.add("show");
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
 </body>
