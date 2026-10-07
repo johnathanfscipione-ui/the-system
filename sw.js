@@ -1,6 +1,6 @@
-const CACHE="life-system-v3";
+const CACHE="life-system-v4";
 self.addEventListener("install",e=>e.waitUntil(
-  caches.open(CACHE).then(c=>c.addAll(["./","./index.html","./index.html?v=3","./manifest.json"]))
+  caches.open(CACHE).then(c=>c.addAll(["./","./index.html","./index.html?v=4","./manifest.json"]))
 ));
 self.addEventListener("activate",e=>e.waitUntil(
   caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))

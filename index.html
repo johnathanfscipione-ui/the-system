@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM // V3</title>
+<title>THE SYSTEM // V4</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -84,6 +84,7 @@ input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;backgro
 <div id="intro" class="intro"><div class="introbox"><div class="sigil glitch">✦</div><div class="sys">SYSTEM CONNECTION ESTABLISHED</div><h1>AWAKEN</h1><p>A system has appeared before you. It does not care who you were yesterday. It only measures what you do next.</p><button class="btn" onclick="finishIntro()">ACCEPT THE SYSTEM</button></div></div>
 <script>
 const KEY="life-system-v1";
+const MILESTONES=[5,15,30,45];
 const starter=[
 {id:1,name:"Complete a workout",desc:"Strength training or cardio",xp:100,stat:"str",emoji:"🏋️"},
 {id:2,name:"Study for 60 minutes",desc:"School, math, programming, or another skill",xp:100,stat:"int",emoji:"📚"},
@@ -93,7 +94,9 @@ const starter=[
 let pendingTask=null;
 let state=JSON.parse(localStorage.getItem(KEY)||"null");
 if(state && typeof state.introSeen==="undefined") state.introSeen=false;
-if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false};
+if(state && !state.milestones) state.milestones={};
+if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
+if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,milestones:{5:false,15:false,30:false,45:false}};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -109,7 +112,7 @@ document.getElementById("xpFill").style.width=Math.min(100,state.xp/xpNeeded()*1
 for(const k of ["str","int","dis"]){document.getElementById(k).textContent=state.stats[k];document.getElementById("c"+k).textContent=state.stats[k]}
 document.getElementById("coins").textContent=state.coins.toLocaleString();
 document.getElementById("statusLevel").textContent="LEVEL "+state.level;
-let cls=state.level>=10?["SHADOW HUNTER","🌑","The System has recognized a hunter-type path."]:state.level>=5?["AWAKENED","⚡","Your potential is beginning to manifest."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
+let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. The System recognizes you as an S-Rank existence."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete. Your class now reflects your growth."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
 document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
 document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
 document.getElementById("streakText").textContent=state.streak+" DAYS";
@@ -121,7 +124,7 @@ const a=document.getElementById("achList");const achievements=[
 ["QUEST CLEARER","Clear 5 tasks","five",Object.keys(state.completed).length>=5],
 ["LEVEL 5","Reach Level 5","l5",state.level>=5],
 ["DISCIPLINE","Reach a 7-day streak","streak",state.streak>=7],
-["HUNTER","Reach Level 10","l10",state.level>=10]];
+["AWAKENED","Reach Level 5","l5a",state.level>=5],["EVOLVED","Reach Level 15","l15",state.level>=15],["ASCENDED","Reach Level 30","l30",state.level>=30],["SOVEREIGN","Reach Level 45","l45",state.level>=45]];
 a.innerHTML=achievements.map(x=>`<div class="listrow"><span class="icon">${x[3]?"🏆":"🔒"}</span><div class="grow"><b>${x[0]}</b><div class="muted">${x[1]}</div></div><strong>${x[3]?"UNLOCKED":"LOCKED"}</strong></div>`).join("");
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -146,12 +149,26 @@ function finishIntro(){
   save();
   document.getElementById("intro").classList.remove("show");
 }
+function milestoneEvent(level){
+  const events={
+    5:["FIRST AWAKENING","AWAKENING REQUIREMENT MET\n\nYour body and mind have adapted to the System.\nA hidden power has been detected.\n\nCLASS EVOLUTION AVAILABLE","⚡"],
+    15:["CLASS EVOLUTION","SYSTEM WARNING\n\nYour current class can no longer contain your growth.\nYour first evolution has been triggered.\n\nNEW CLASS TIER: ELITE AWAKENED","🔥"],
+    30:["ADVANCED AWAKENING","SYSTEM ALERT\n\nYour power has exceeded the limits of ordinary awakened beings.\nAn advanced awakening has been achieved.\n\nNEW CLASS TIER: ASCENDED HUNTER","🌌"],
+    45:["FINAL EVOLUTION","S-RANK THRESHOLD REACHED\n\nThe System no longer recognizes you as an ordinary player.\nYour final evolution has begun.\n\nNEW CLASS TIER: SYSTEM SOVEREIGN","👑"]
+  };
+  const e=events[level]; if(!e)return;
+  state.milestones[level]=true; save();
+  show(e[0],e[1]);
+  setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),700);
+}
 function complete(t){
 if(state.completed[t.id]===today())return;
 const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/5));state.stats[t.stat||"dis"]++;
 const prev=state.lastDay;const d=today();if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
 while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++}
 save();render();if(!state.introSeen)document.getElementById("intro").classList.add("show");
+const reached=MILESTONES.find(m=>m>oldLevel && state.level>=m && !state.milestones[m]);
+if(reached){ milestoneEvent(reached); return; }
 if(state.level>oldLevel){
   show("LEVEL UP","LEVEL "+state.level+" ACHIEVED. Your character status has evolved.");
   setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),650);
