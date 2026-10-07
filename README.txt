@@ -1,3 +1,3 @@
-THE SYSTEM — V8.1
+THE SYSTEM — Life RPG V8.2
 
-Visual-only upgrade to the V8 build. Preserves the existing questionnaire, progression, quests, localStorage key, and milestone system.
+Visual polish build. Preserves the existing game logic and localStorage key.

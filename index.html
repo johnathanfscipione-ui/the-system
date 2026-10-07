@@ -83,78 +83,237 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 .identity{position:fixed;z-index:101;inset:0;background:radial-gradient(circle at 50% 25%,#123a63,#070b17 48%,#010207);display:none;place-items:center;padding:28px}.identity.show{display:grid}.identitybox{width:min(390px,100%);text-align:center}.identitybox .sys{margin-bottom:14px}.identitybox h2{font-size:26px;letter-spacing:3px;margin:0 0 18px}.identitybox input{font-size:16px;text-align:center;padding:15px 12px;border-color:#3c6598}.identityConfirm{display:none}.identityConfirm.show{display:block}.identityConfirm h2{color:var(--cyan);text-shadow:0 0 18px #5de7ff55}.identityName{font-size:29px;font-weight:900;margin:7px 0 18px}
 @media(max-width:390px){.choicegrid{grid-template-columns:1fr}.herochar{min-height:225px}.startupText{font-size:21px}.startupSigil{width:96px;height:96px}}
 
-/* V8.1 — CINEMATIC SYSTEM PLAYER */
+/* V8.2 — FULL VISUAL POLISH */
+body{
+  background:#02040a;
+  overflow-x:hidden;
+}
+body:before{
+  animation:ambientDrift 18s ease-in-out infinite alternate;
+}
+body:after{
+  opacity:.16;
+  background-size:38px 38px;
+  animation:gridDrift 10s linear infinite;
+}
+@keyframes ambientDrift{
+  0%{transform:scale(1) translate3d(-1%,0,0)}
+  50%{transform:scale(1.06) translate3d(1%,1%,0)}
+  100%{transform:scale(1.03) translate3d(-1%,2%,0)}
+}
+/* floating system particles */
+body{
+  position:relative;
+}
+body .app:before{
+  content:"✦  ·  ·  ✧  ·  •  ·  ✦  ·  ·  ✧";
+  position:fixed;
+  inset:-20% 0;
+  pointer-events:none;
+  z-index:-1;
+  color:#5de7ff;
+  font-size:15px;
+  letter-spacing:42px;
+  line-height:105px;
+  opacity:.11;
+  transform:rotate(-7deg);
+  animation:particleField 22s linear infinite;
+}
+@keyframes particleField{
+  from{transform:translateY(-4%) rotate(-7deg)}
+  to{transform:translateY(10%) rotate(-7deg)}
+}
+
+/* stronger player HUD */
 #home>.panel:first-child{
-  min-height:285px;
+  min-height:310px;
+  padding:25px 18px 20px;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 50% 38%,#1b4b7b 0,transparent 27%),
+    radial-gradient(circle at 50% 100%,#32195a 0,transparent 42%),
+    linear-gradient(145deg,#0b1429f2,#03060ef8);
+  box-shadow:0 0 70px #4388ff2b,inset 0 0 80px #5de7ff0d;
+}
+#home>.panel:first-child:after{
+  background:linear-gradient(90deg,transparent,#5de7ff0b,transparent);
+  animation:panelSweep 5s ease-in-out infinite;
+}
+#home>.panel:first-child h1{
+  font-size:38px;
+  letter-spacing:3px;
+  text-shadow:0 0 20px #5de7ff55,0 0 45px #4388ff33;
+}
+#home>.panel:first-child .sub{
+  margin-bottom:18px;
+}
+#home>.panel:first-child .bar{
+  height:11px;
+  box-shadow:0 0 15px #4388ff22;
+}
+#home>.panel:first-child .stats{
+  gap:8px;
+  margin-top:21px;
+}
+#home>.panel:first-child .stat{
+  padding:12px 6px;
+  min-height:63px;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  text-align:center;
-  background:
-    radial-gradient(circle at 50% 35%,#173d6b 0,transparent 32%),
-    linear-gradient(145deg,#0b1429ee,#04070ff5);
-  border-color:#315789;
-  box-shadow:0 0 55px #4388ff22,inset 0 0 55px #5de7ff0b;
-}
-#home>.panel:first-child:before{
-  height:2px;
-  opacity:.9;
-  box-shadow:0 0 12px #5de7ff55;
-}
-#home>.panel:first-child .sys{
-  font-size:9px;
-  letter-spacing:3.5px;
-  margin-bottom:8px;
-}
-#home>.panel:first-child h1{
-  position:relative;
-  font-size:34px;
-  letter-spacing:2px;
-  text-shadow:0 0 24px #5de7ff35;
-  margin:2px 0 4px;
-}
-#home>.panel:first-child .sub{
-  margin-bottom:20px;
-}
-#home>.panel:first-child .bar{
-  width:100%;
-  height:10px;
-  margin-top:2px;
-}
-#home>.panel:first-child .row{
-  font-size:10px;
-  margin-top:8px;
-}
-#home>.panel:first-child .stats{
-  margin-top:20px;
-}
-#home>.panel:first-child .stat{
-  padding:11px 7px;
-  background:#050a14cc;
-  border-color:#28466f;
+  background:#040913d9;
 }
 #home>.panel:first-child .stat b{
-  font-size:20px;
-  text-shadow:0 0 12px #5de7ff22;
+  font-size:21px;
 }
 #home>.panel:first-child .stat span{
   font-size:7px;
 }
-#rank{
+
+/* XP energy animation */
+#xpFill{
   position:relative;
-  box-shadow:0 0 22px #ffd56b22;
+  overflow:hidden;
 }
-#rank:before{
+#xpFill:after{
   content:"";
   position:absolute;
-  inset:-5px;
-  border-radius:8px;
-  border:1px solid #ffd56b12;
+  top:0;
+  bottom:0;
+  width:45%;
+  background:linear-gradient(90deg,transparent,#fff9,transparent);
+  transform:translateX(-140%);
+  animation:xpSweep 2.2s linear infinite;
+}
+@keyframes xpSweep{
+  to{transform:translateX(320%)}
+}
+
+/* quest cards */
+.quest{
+  min-height:76px;
+  padding:13px 12px;
+  border-radius:14px;
+  background:linear-gradient(145deg,#0b1529f2,#050a13f5);
+  box-shadow:0 0 18px #4388ff0d,inset 0 0 18px #5de7ff05;
+  transform:translateZ(0);
+}
+.quest:before{
+  content:"DAILY QUEST";
+  position:absolute;
+  top:7px;
+  right:10px;
+  font-size:6px;
+  letter-spacing:1.5px;
+  color:#6685ad;
+  font-weight:900;
+}
+.quest .check{
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  box-shadow:inset 0 0 12px #4388ff12;
+}
+.quest .q{
+  padding-right:52px;
+}
+.quest .q strong{
+  font-size:14px;
+}
+.quest .q small{
+  font-size:9.5px;
+}
+.quest .reward{
+  font-size:11px;
+  text-shadow:0 0 10px #5de7ff44;
+}
+.quest:not(.done){
+  animation:questIdle 3.5s ease-in-out infinite;
+}
+.quest:nth-child(2){animation-delay:.35s}
+.quest:nth-child(3){animation-delay:.7s}
+.quest:nth-child(4){animation-delay:1.05s}
+.quest:nth-child(5){animation-delay:1.4s}
+@keyframes questIdle{
+  50%{box-shadow:0 0 24px #4388ff14,inset 0 0 20px #5de7ff07}
+}
+.quest.done{
+  border-color:#28634f;
+}
+.quest.done .check{
+  box-shadow:0 0 16px #5df2ae22,inset 0 0 12px #5df2ae0d;
+}
+
+/* buttons +5-ish visual/tap-area increase */
+.btn{
+  padding:13px;
+  min-height:45px;
+  font-size:11.5px;
+  border-radius:11px;
+}
+.bottom{
+  padding:7px;
+}
+.bottom button{
+  min-height:47px;
+  padding:10px 3px;
+  font-size:9.5px;
+}
+.btn:active,.bottom button:active{
+  transform:scale(.965);
+}
+
+/* system navigation transition */
+.screen.active{
+  animation:screenIn .28s ease both;
+}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* stronger status hero */
+.herochar{
+  min-height:285px;
+  background:
+    radial-gradient(circle at 50% 35%,#1d467b 0,transparent 30%),
+    radial-gradient(circle at 50% 100%,#32144f 0,transparent 45%),
+    #070c18;
+  box-shadow:0 0 60px #4388ff25,inset 0 0 65px #5de7ff0b;
+}
+.avatar{
+  font-size:72px;
+  filter:drop-shadow(0 0 16px #5de7ff66);
+}
+.herochar:after{
+  content:"";
+  position:absolute;
+  width:180px;height:180px;
+  left:50%;top:47%;
+  transform:translate(-50%,-50%);
+  border:1px solid #5de7ff2b;
+  border-radius:50%;
+  box-shadow:0 0 30px #4388ff14;
+  animation:heroRing 4s linear infinite;
   pointer-events:none;
 }
+@keyframes heroRing{
+  to{transform:translate(-50%,-50%) rotate(360deg)}
+}
+
+/* notifications */
+.modalbox{
+  animation:modalIn .25s ease both;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94) translateY(8px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
 @media(max-width:390px){
-  #home>.panel:first-child{min-height:265px}
-  #home>.panel:first-child h1{font-size:30px}
+  #home>.panel:first-child{min-height:285px}
+  #home>.panel:first-child h1{font-size:33px}
+  .herochar{min-height:255px}
+  .avatar{font-size:64px}
 }
 
 </style>
@@ -166,7 +325,7 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 <section id="home" class="screen active">
 <div class="panel">
 <div class="sys">SYSTEM USER // ACTIVE</div><h1 id="playerName">JOHNATHAN</h1><div class="sub">The System has recognized your potential.</div>
-<div class="sys" style="font-size:8px;letter-spacing:2px;opacity:.72;margin-bottom:5px">PROGRESSION CORE</div><div class="bar"><div id="xpFill" class="fill"></div></div><div class="row"><span id="xpText"></span><span id="levelText"></span></div>
+<div class="bar"><div id="xpFill" class="fill"></div></div><div class="row"><span id="xpText"></span><span id="levelText"></span></div>
 <div class="stats"><div class="stat"><b id="str">10</b><span>STRENGTH</span></div><div class="stat"><b id="int">10</b><span>INTELLIGENCE</span></div><div class="stat"><b id="dis">10</b><span>DISCIPLINE</span></div></div>
 </div>
 <div class="section"><b>SYSTEM TASKS</b><span id="questCount"></span></div>
