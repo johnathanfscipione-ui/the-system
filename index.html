@@ -108,6 +108,8 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 .charMenu button{border:1px solid transparent;border-radius:8px;background:#080e1a;color:#7185a8;padding:10px 3px;font-size:8px;font-weight:900;letter-spacing:.7px}.charMenu button.active{color:var(--cyan);border-color:#2c6089;background:#0a1b2d;box-shadow:inset 0 0 14px #5de7ff0d}
 .charPane{display:none}.charPane.active{display:block;animation:paneIn .22s ease}.charHeroV9{position:relative;overflow:hidden;border:1px solid #35558a;border-radius:18px;padding:22px 18px;text-align:center;background:radial-gradient(circle at 50% 20%,#17345f,#080c18 68%);box-shadow:0 0 35px #4388ff10,inset 0 0 30px #5de7ff08;margin-bottom:10px}.charHeroV9:after{content:"";position:absolute;left:-20%;right:-20%;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:heroScan 3s linear infinite}.charAvatarV9{font-size:64px;line-height:1;margin:4px 0 8px;filter:drop-shadow(0 0 18px #5de7ff55);animation:floatAvatar 2.8s ease-in-out infinite}.charNameV9{font-size:25px;letter-spacing:2px;margin:4px 0}.charRankV9{display:inline-block;margin-top:8px;padding:5px 9px;border:1px solid #5e4c20;border-radius:6px;background:#171205;color:var(--gold);font-size:9px;font-weight:900;letter-spacing:1.5px}.charXP{margin-top:15px;text-align:left}.charXP .row{font-size:9px}.miniGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.miniStat{padding:11px 8px;text-align:center;border:1px solid #20365d;border-radius:11px;background:#060b15}.miniStat b{display:block;font-size:20px}.miniStat span{font-size:7px;letter-spacing:1px;color:var(--muted)}.sectionLabelV9{font-size:9px;letter-spacing:2px;color:var(--cyan);font-weight:900;margin:15px 2px 7px}.slotGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.slot{min-height:92px;border:1px solid #20365d;border-radius:12px;background:linear-gradient(145deg,#0a1120,#050913);padding:12px;display:flex;flex-direction:column;justify-content:space-between}.slot .slotIcon{font-size:23px;opacity:.9}.slot b{font-size:10px}.slot small{color:#657b9e;font-size:8px}.slot.locked{opacity:.62;border-style:dashed}.lockedTag{color:#6f86a9;font-size:7px;letter-spacing:1px;font-weight:900}.inventoryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.invSlot{aspect-ratio:1;border:1px solid #20365d;border-radius:10px;background:#050a13;display:grid;place-items:center;font-size:22px;color:#536b90}.titleCard{padding:13px;border:1px solid #20365d;border-radius:11px;background:#080e1a}.titleCard b{color:#8fa8cb}.titleCard p{margin:4px 0 0;color:#667c9d;font-size:9px}.futureNote{padding:12px;border:1px dashed #31517d;border-radius:11px;background:#07101d;color:#7890b2;font-size:9px;line-height:1.5;text-align:center}.futureNote strong{color:var(--cyan)}
 @keyframes paneIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}@keyframes heroScan{from{transform:translateX(-30%)}to{transform:translateX(30%)}}
+
+.classAwaken{position:fixed;z-index:150;inset:0;background:radial-gradient(circle at 50% 20%,#123b66 0,#050a16 42%,#010207 82%);display:none;place-items:center;padding:20px;overflow:auto}.classAwaken.show{display:grid}.classBox{width:min(520px,100%);text-align:center;padding:22px 0}.classBox .sys{font-size:10px;letter-spacing:4px}.classBox h2{font-size:30px;letter-spacing:4px;margin:8px 0 4px;text-shadow:0 0 25px #5de7ff66}.classBox p{font-size:12px;color:#9fb1d0;line-height:1.5;margin:0 auto 18px;max-width:420px}.classGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}.classCard{position:relative;border:1px solid #284d79;background:linear-gradient(145deg,#0c1830,#050913);border-radius:15px;padding:16px;color:var(--white);min-height:150px;transition:.2s;box-shadow:inset 0 0 25px #5de7ff05}.classCard:active{transform:scale(.98);border-color:var(--cyan);box-shadow:0 0 25px #5de7ff22}.classCard .classIcon{font-size:31px;display:block;margin-bottom:10px}.classCard b{font-size:16px;letter-spacing:1px}.classCard small{display:block;color:#91a5c8;font-size:10px;line-height:1.45;margin-top:7px}.classCard .affinity{position:absolute;right:10px;top:10px;color:var(--cyan);font-size:8px;letter-spacing:1px}.classFooter{margin-top:15px;color:#657c9f;font-size:9px;letter-spacing:1px}.classChoiceBtn{margin-top:16px;width:100%;display:none}.classChoiceBtn.show{display:block}@media(max-width:390px){.classGrid{grid-template-columns:1fr}.classBox h2{font-size:25px}}
 </style>
 </head>
 <body>
@@ -139,7 +141,7 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 <div class="charHeroV9"><div class="title">PLAYER CHARACTER</div><div class="charAvatarV9" id="avatar">⚔️</div><h1 class="charNameV9" id="charPlayerName">PLAYER</h1><div class="sub" id="classDesc">Your true class has not yet been revealed.</div><div class="charRankV9" id="charRank">E-RANK</div><div class="charXP"><div class="row"><span id="charXPText">0 / 500 XP</span><span id="charLevelText">LEVEL 1</span></div><div class="bar"><div id="charXPFill" class="fill"></div></div></div></div>
 <div class="miniGrid"><div class="miniStat"><b id="cstr">10</b><span>STRENGTH</span></div><div class="miniStat"><b id="cint">10</b><span>INTELLIGENCE</span></div><div class="miniStat"><b id="cdis">10</b><span>DISCIPLINE</span></div></div>
 <div class="sectionLabelV9">PROGRESSION</div>
-<div class="panel"><div class="listrow"><span class="icon">⚡</span><div class="grow"><b>Awakening</b><div class="muted">Level 5 — Class Selection</div></div><strong id="awakeningState">LOCKED</strong></div><div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Class Evolution</b><div class="muted">Level 15 — Evolution</div></div><strong>LOCKED</strong></div><div class="listrow"><span class="icon">👑</span><div class="grow"><b>Final Evolution</b><div class="muted">Level 45 — System Sovereign</div></div><strong>LOCKED</strong></div></div>
+<div class="panel"><div class="listrow"><span class="icon">⚡</span><div class="grow"><b>Awakening</b><div class="muted">Level 5 — Class Selection</div></div><strong id="awakeningState">LOCKED</strong><button id="chooseClassBtn" class="classChoiceBtn btn" onclick="openClassSelection()">CHOOSE CLASS</button></div><div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Class Evolution</b><div class="muted">Level 15 — Evolution</div></div><strong>LOCKED</strong></div><div class="listrow"><span class="icon">👑</span><div class="grow"><b>Final Evolution</b><div class="muted">Level 45 — System Sovereign</div></div><strong>LOCKED</strong></div></div>
 <div class="sectionLabelV9">SYSTEM PROFILE</div><button class="btn secondary" onclick="openAssessment(true)">⚙️ RECALIBRATE SYSTEM PROFILE</button>
 </div>
 
@@ -193,6 +195,8 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 
 <div id="startup" class="startup"><div class="startupgrid"></div><div class="startupFlash"></div><div class="startupCore"><div class="startupBeam"></div><div class="startupImpact"></div><div class="startupSigil"></div><div class="startupLabel">SYSTEM CONNECTION</div><div id="startupText" class="startupText">INITIALIZING...</div><div class="startupLine"></div><div class="startupNotification"><div class="notificationBox"><div class="notificationHeader"><div class="notificationIcon"><span>✦</span></div>SYSTEM NOTIFICATION</div><h2 id="startupNoticeTitle">AWAKENING PROTOCOL</h2><p id="startupNoticeText">A new journey has been detected. The System is ready to initialize your interface.</p><div class="notificationRule"></div><div class="notificationStatus"><span>CONNECTION</span><strong>STABLE</strong></div><button class="notificationButton" onclick="continueStartup()">[ INITIALIZE INTERFACE ]</button></div></div></div><button class="startupSkip" onclick="skipStartup()">TAP TO SKIP</button></div>
 <div id="identity" class="identity"><div class="identitybox"><div id="identityEntry"><div class="sys">SYSTEM IDENTIFICATION</div><h2>IDENTIFY YOURSELF</h2><input id="nameInput" maxlength="18" autocomplete="nickname" placeholder="Enter Name"><button class="btn" onclick="confirmIdentity()">CONFIRM IDENTITY</button></div><div id="identityConfirm" class="identityConfirm"><div class="sys">IDENTITY CONFIRMED</div><h2>Welcome</h2><div id="identityName" class="identityName"></div><button class="btn" onclick="finishIdentity()">CONTINUE</button></div></div></div>
+
+<div id="classAwaken" class="classAwaken"><div class="classBox"><div class="sys">SYSTEM // AWAKENING PROTOCOL</div><h2>CHOOSE YOUR CLASS</h2><p>Your actions have shaped the path before you. This choice will define your first awakened identity. Later evolutions will build from it.</p><div class="classGrid"><button class="classCard" onclick="chooseClass('vanguard')"><span class="classIcon">⚔️</span><b>VANGUARD</b><small>Strength-focused. Built for action, resilience, and physical progression.</small><span class="affinity">STRENGTH</span></button><button class="classCard" onclick="chooseClass('arcanist')"><span class="classIcon">🔷</span><b>ARCANIST</b><small>Intelligence-focused. Built for learning, strategy, and mastery.</small><span class="affinity">INTELLIGENCE</span></button><button class="classCard" onclick="chooseClass('willforged')"><span class="classIcon">🔥</span><b>WILLFORGED</b><small>Discipline-focused. Built for consistency, control, and endurance.</small><span class="affinity">DISCIPLINE</span></button><button class="classCard" onclick="chooseClass('ascendant')"><span class="classIcon">✦</span><b>ASCENDANT</b><small>Balanced path. Built for players who refuse to specialize too early.</small><span class="affinity">BALANCED</span></button></div><div class="classFooter">CLASS SELECTION IS PERSISTENT</div></div></div>
 <script>
 const KEY="life-system-v1";
 const MILESTONES=[5,15,30,45];
@@ -212,9 +216,10 @@ if(state && !state.milestones) state.milestones={};
 if(state && !state.equipment) state.equipment={weapon:null,armor:null,accessory:null,title:null};
 if(state && !state.inventory) state.inventory=[];
 if(state && !state.abilities) state.abilities=[];
+if(state && typeof state.classId === "undefined") state.classId=null;
 if(state && state.profile){state.profile.goals=Array.isArray(state.profile.goals)?state.profile.goals:[];state.profile.objectives=Array.isArray(state.profile.objectives)?state.profile.objectives:[];for(const k of ["state","time","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}for(const k of ["obstacle","motivation"]){state.profile[k]=Array.isArray(state.profile[k])?state.profile[k]:(state.profile[k]?[state.profile[k]]:[]);}}
 if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
-if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false},equipment:{weapon:null,armor:null,accessory:null,title:null},inventory:[],abilities:[]};
+if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false},equipment:{weapon:null,armor:null,accessory:null,title:null},inventory:[],abilities:[],classId:null};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -235,9 +240,11 @@ document.getElementById("charRank").textContent=rank()+"-RANK";
 document.getElementById("charLevelText").textContent="LEVEL "+state.level;
 document.getElementById("charXPText").textContent=state.xp+" / "+xpNeeded()+" XP";
 document.getElementById("charXPFill").style.width=Math.min(100,state.xp/xpNeeded()*100)+"%";
-document.getElementById("awakeningState").textContent=state.level>=5?"AVAILABLE":"LOCKED";
+document.getElementById("awakeningState").textContent=state.classId?"AWAKENED":(state.level>=5?"AVAILABLE":"LOCKED");
+const chooseBtn=document.getElementById("chooseClassBtn"); if(chooseBtn) chooseBtn.classList.toggle("show",state.level>=5&&!state.classId);
 
-let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. The System recognizes you as an S-Rank existence."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete. Your class now reflects your growth."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
+const classes={vanguard:["VANGUARD","⚔️","Strength-focused. Built for action, resilience, and physical progression."],arcanist:["ARCANIST","🔷","Intelligence-focused. Built for learning, strategy, and mastery."],willforged:["WILLFORGED","🔥","Discipline-focused. Built for consistency, control, and endurance."],ascendant:["ASCENDANT","✦","Balanced path. Built for players who refuse to specialize too early."]};
+let cls=state.classId&&classes[state.classId]?classes[state.classId]:state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. Your final evolution awaits."]:state.level>=30?["ASCENDED","🌌","Your power has exceeded ordinary limits. Advanced awakening awaits."]:state.level>=15?["AWAKENED","🔥","Your first evolution has begun. Your class will continue to evolve."]:["UNAWAKENED","⚔️","Reach Level 5 to awaken and choose your class."];
 document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
 document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
 document.getElementById("streakText").textContent=state.streak+" DAYS";
@@ -368,7 +375,7 @@ function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.k
 function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
 function milestoneEvent(level){
   const events={
-    5:["FIRST AWAKENING","AWAKENING REQUIREMENT MET\n\nYour body and mind have adapted to the System.\nA hidden power has been detected.\n\nCLASS EVOLUTION AVAILABLE","⚡"],
+    5:["AWAKENING CONDITION MET","LEVEL 5 ACHIEVED\n\nYour actions have triggered a hidden development.\nA new path is available.\n\nCLASS SELECTION AVAILABLE","⚡"],
     15:["CLASS EVOLUTION","SYSTEM WARNING\n\nYour current class can no longer contain your growth.\nYour first evolution has been triggered.\n\nNEW CLASS TIER: ELITE AWAKENED","🔥"],
     30:["ADVANCED AWAKENING","SYSTEM ALERT\n\nYour power has exceeded the limits of ordinary awakened beings.\nAn advanced awakening has been achieved.\n\nNEW CLASS TIER: ASCENDED HUNTER","🌌"],
     45:["FINAL EVOLUTION","S-RANK THRESHOLD REACHED\n\nThe System no longer recognizes you as an ordinary player.\nYour final evolution has begun.\n\nNEW CLASS TIER: SYSTEM SOVEREIGN","👑"]
@@ -376,7 +383,23 @@ function milestoneEvent(level){
   const e=events[level]; if(!e)return;
   state.milestones[level]=true; save();
   show(e[0],e[1]);
-  setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),700);
+  if(level===5 && !state.classId){
+    setTimeout(()=>{closeModal();openClassSelection();},850);
+  }else{
+    setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),700);
+  }
+}
+function openClassSelection(){document.getElementById("classAwaken").classList.add("show");}
+function chooseClass(id){
+  if(state.level<5){return;}
+  state.classId=id;
+  state.milestones[5]=true;
+  save();
+  document.getElementById("classAwaken").classList.remove("show");
+  render();
+  tab("character",document.querySelectorAll(".bottom button")[1]);
+  const labels={vanguard:"VANGUARD",arcanist:"ARCANIST",willforged:"WILLFORGED",ascendant:"ASCENDANT"};
+  show("CLASS AWAKENED",labels[id]+" has been recognized as your awakened path.");
 }
 function complete(t){
 if(state.completed[t.id]===today())return;
