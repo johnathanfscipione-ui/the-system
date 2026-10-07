@@ -106,7 +106,7 @@ if(state && typeof state.introSeen==="undefined") state.introSeen=false;
 if(state && typeof state.assessmentSeen==="undefined") state.assessmentSeen=!!state.introSeen;
 if(state && !state.profile) state.profile={goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""};
 if(state && !state.milestones) state.milestones={};
-if(state && state.profile){state.profile.goals=Array.isArray(state.profile.goals)?state.profile.goals:[];state.profile.objectives=Array.isArray(state.profile.objectives)?state.profile.objectives:[];for(const k of ["state","time","obstacle","motivation","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}}
+if(state && state.profile){state.profile.goals=Array.isArray(state.profile.goals)?state.profile.goals:[];state.profile.objectives=Array.isArray(state.profile.objectives)?state.profile.objectives:[];for(const k of ["state","time","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}for(const k of ["obstacle","motivation"]){state.profile[k]=Array.isArray(state.profile[k])?state.profile[k]:(state.profile[k]?[state.profile[k]]:[]);}}
 if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
 if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false}};
 
@@ -191,9 +191,9 @@ const assessmentData=[
   ["🌱","Unawakened","I’m ready to begin my journey."],["⚔️","Developing","I’ve made progress, but I struggle with consistency."],["🔥","Established","I already have good habits, but I want to improve further."],["👑","Awakened","I’m highly disciplined and looking for the next level."]]},
  {title:"COMMITMENT",prompt:"How much time are you willing to dedicate to your progression each day?",type:"single",key:"time",options:[
   ["🌱","Brief Encounter","15–30 minutes"],["⚔️","Daily Training","30–60 minutes"],["🔥","Dedicated Training","1–2 hours"],["👑","Full Commitment","2+ hours"]]},
- {title:"OBSTACLE IDENTIFICATION",prompt:"What most often prevents you from making progress?",type:"single",key:"obstacle",options:[
+ {title:"OBSTACLE IDENTIFICATION",prompt:"What most often prevents you from making progress?",type:"multi",max:3,key:"obstacle",options:[
   ["💤","Inertia","I struggle to get started."],["⏳","Time","I have trouble finding enough time."],["🔥","Consistency","I start strong, but struggle to maintain momentum."],["🧠","Focus","I get distracted or lose concentration."],["⚔️","Difficulty","I lose motivation when things get challenging."],["🌫️","Direction","I’m not always sure what I should be working toward."]]},
- {title:"MOTIVATION",prompt:"What drives you to keep moving forward?",type:"single",key:"motivation",options:[
+ {title:"MOTIVATION",prompt:"What drives you to keep moving forward?",type:"multi",max:3,key:"motivation",options:[
   ["🏆","Achievement","I want to accomplish things I can be proud of."],["📈","Growth","I want to see myself become better."],["💪","Strength","I want to become stronger and more capable."],["🧠","Mastery","I want to become highly skilled at what I do."],["🎯","Purpose","I want to build a life that means something to me."],["🔥","Challenge","I want to push myself beyond my limits."]]},
  {title:"CHALLENGE LEVEL",prompt:"How should the System push you?",type:"single",key:"challenge",options:[
   ["🌱","Steady Growth","Keep me progressing without overwhelming me."],["⚔️","Balanced","Challenge me, but keep it realistic."],["🔥","Pressure","Push me when I start getting comfortable."],["💀","Limit Break","Give me difficult challenges. I want to be pushed."]]},
@@ -220,8 +220,27 @@ function renderAssessment(){
  document.getElementById("profilePreview").classList.add("hidden");
  setTimeout(()=>{const box=document.querySelector('.assessbox');const cue=document.getElementById('scrollCue');if(box&&cue)cue.classList.toggle('show',box.scrollHeight>box.clientHeight+8);},30);
 }
-function selectAssessment(i){const d=assessmentData[assessStep],opts=getAssessmentOptions(),v=opts[i][1];if(d.type==="multi"){let a=Array.isArray(state.profile[d.key])?state.profile[d.key]:[];if(d.key==="objectives"&&v==="All Paths"){a=a.includes(v)?a.filter(x=>x!==v):[...a.filter(x=>x!=="All Paths"),v];}else if(d.key==="objectives"&&a.includes("All Paths")){a=[v];}else a=a.includes(v)?a.filter(x=>x!==v):[...a,v];state.profile[d.key]=a;}else state.profile[d.key]=v;save();renderAssessment();}
-function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();show("SYSTEM PROFILE COMPLETE","Your objectives have been recorded. The System will now shape future quests around your chosen path.");}
+function selectAssessment(i){const d=assessmentData[assessStep],opts=getAssessmentOptions(),v=opts[i][1];if(d.type==="multi"){let a=Array.isArray(state.profile[d.key])?state.profile[d.key]:[];if(d.key==="objectives"&&v==="All Paths"){a=a.includes(v)?a.filter(x=>x!==v):[...a.filter(x=>x!=="All Paths"),v];}else if(d.key==="objectives"&&a.includes("All Paths")){a=[v];}else if(a.includes(v)){a=a.filter(x=>x!==v);}else{if(d.max&&a.length>=d.max){show("SELECTION LIMIT","Choose up to "+d.max+" options.");return;}a=[...a,v];}state.profile[d.key]=a;}else state.profile[d.key]=v;save();renderAssessment();}
+function applyProfileQuests(){
+  const p=state.profile||{};
+  const goals=Array.isArray(p.goals)?p.goals:[];
+  const objectives=Array.isArray(p.objectives)?p.objectives:[];
+  const tags=[...goals,...objectives];
+  const has=x=>tags.includes(x)||objectives.includes("All Paths");
+  const generated=[];
+  if(has("Fitness")||has("Physical Ascension")) generated.push({name:"System Training Protocol",desc:"Complete 30+ minutes of intentional exercise.",xp:90,stat:"str",emoji:"⚔️"});
+  if(has("Knowledge")||has("Knowledge Acquisition")) generated.push({name:"Knowledge Acquisition",desc:"Complete 30 minutes of focused learning.",xp:90,stat:"int",emoji:"🧠"});
+  if(has("Discipline")||has("Discipline")) generated.push({name:"Discipline Trial",desc:"Complete one task you have been putting off.",xp:80,stat:"dis",emoji:"🔥"});
+  if(has("Order")||has("Productivity")) generated.push({name:"Environment Reset",desc:"Spend 15 minutes organizing your space or schedule.",xp:60,stat:"dis",emoji:"📦"});
+  if(has("Sleep")) generated.push({name:"Sleep Protocol",desc:"Follow your planned bedtime routine tonight.",xp:70,stat:"dis",emoji:"😴"});
+  if(has("Career")||has("Career Advancement")) generated.push({name:"Career Progression",desc:"Spend 30 minutes on a career-building action.",xp:90,stat:"int",emoji:"⚔️"});
+  if(has("Finance")||has("Financial Ascension")) generated.push({name:"Financial Checkpoint",desc:"Spend 15 minutes reviewing or improving your finances.",xp:80,stat:"int",emoji:"💰"});
+  if(has("Mastery")||has("Mastery Pursuit")) generated.push({name:"Mastery Session",desc:"Practice a hobby or personal skill for 30 minutes.",xp:80,stat:"int",emoji:"🏆"});
+  if(!generated.length) generated.push({name:"System Initiation",desc:"Complete one meaningful action toward your goals today.",xp:75,stat:"dis",emoji:"✦"});
+  const existing=state.tasks.map(t=>t.name);
+  generated.slice(0,5).forEach(t=>{if(!existing.includes(t.name))state.tasks.push({id:"sys-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),...t,systemGenerated:true});});
+}
+function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();tab("home",document.querySelectorAll(".bottom button")[0]);show("SYSTEM INITIALIZED","Your profile is online. The System has generated your first personalized quests.");}
 function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
 function milestoneEvent(level){
   const events={
