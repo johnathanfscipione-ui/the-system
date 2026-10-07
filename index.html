@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM // V9.5</title>
+<title>THE SYSTEM // V9.6</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -350,6 +350,13 @@ function renderAssessment(){
  setTimeout(()=>{const box=document.querySelector('.assessbox');const cue=document.getElementById('scrollCue');if(box&&cue)cue.classList.toggle('show',box.scrollHeight>box.clientHeight+8);},30);
 }
 function selectAssessment(i){const d=assessmentData[assessStep],opts=getAssessmentOptions(),v=opts[i][1];if(d.type==="multi"){let a=Array.isArray(state.profile[d.key])?state.profile[d.key]:[];if(d.key==="objectives"&&v==="All Paths"){a=a.includes(v)?a.filter(x=>x!==v):[...a.filter(x=>x!=="All Paths"),v];}else if(d.key==="objectives"&&a.includes("All Paths")){a=[v];}else if(a.includes(v)){a=a.filter(x=>x!==v);}else{if(d.max&&a.length>=d.max){show("SELECTION LIMIT","Choose up to "+d.max+" options.");return;}a=[...a,v];}state.profile[d.key]=a;}else state.profile[d.key]=v;save();renderAssessment();}
+function recoverEmptyQuests(){
+  if(!state || !Array.isArray(state.tasks) || state.tasks.length) return;
+  if(state.assessmentSeen){
+    applyProfileQuests();
+    save();
+  }
+}
 function applyProfileQuests(){
   const p=state.profile||{};
   const goals=Array.isArray(p.goals)?p.goals:[];
@@ -369,6 +376,7 @@ function applyProfileQuests(){
   const existing=state.tasks.map(t=>t.name);
   generated.slice(0,5).forEach(t=>{if(!existing.includes(t.name))state.tasks.push({id:"sys-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),...t,systemGenerated:true});});
 }
+recoverEmptyQuests();
 function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();tab("home",document.querySelectorAll(".bottom button")[0]);show("SYSTEM INITIALIZED","Your profile is online. The System has generated your first personalized quests.");}
 function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
 function openClassSelection(){if(state.level<5||state.classId)return;document.getElementById("classModal").classList.add("show");}
