@@ -316,6 +316,17 @@ body .app:before{
   .avatar{font-size:64px}
 }
 
+
+/* V8.3 — Daily Quest emphasis */
+#questList:before{
+  content:"THE SYSTEM HAS SELECTED THREE DAILY OBJECTIVES";
+  display:block;
+  color:#6f8eb9;
+  font-size:7px;
+  letter-spacing:1.7px;
+  margin:-3px 2px 9px;
+}
+
 </style>
 </head>
 <body>
@@ -328,7 +339,7 @@ body .app:before{
 <div class="bar"><div id="xpFill" class="fill"></div></div><div class="row"><span id="xpText"></span><span id="levelText"></span></div>
 <div class="stats"><div class="stat"><b id="str">10</b><span>STRENGTH</span></div><div class="stat"><b id="int">10</b><span>INTELLIGENCE</span></div><div class="stat"><b id="dis">10</b><span>DISCIPLINE</span></div></div>
 </div>
-<div class="section"><b>SYSTEM TASKS</b><span id="questCount"></span></div>
+<div class="section"><b>DAILY QUESTS // 3</b><span id="questCount"></span></div>
 <div id="questList"></div>
 <button class="btn" onclick="openCreate()">＋ CREATE SYSTEM TASK</button>
 <div class="section"><b>DAILY STREAK</b><span id="streakText"></span></div>
@@ -382,6 +393,22 @@ body .app:before{
 <div id="identity" class="identity"><div class="identitybox"><div id="identityEntry"><div class="sys">SYSTEM IDENTIFICATION</div><h2>IDENTIFY YOURSELF</h2><input id="nameInput" maxlength="18" autocomplete="nickname" placeholder="Enter Name"><button class="btn" onclick="confirmIdentity()">CONFIRM IDENTITY</button></div><div id="identityConfirm" class="identityConfirm"><div class="sys">IDENTITY CONFIRMED</div><h2>Welcome</h2><div id="identityName" class="identityName"></div><button class="btn" onclick="finishIdentity()">CONTINUE</button></div></div></div>
 <script>
 const KEY="life-system-v1";
+const CONFIG={
+  dailyQuestCount:3,
+  questXP:{
+    physical:90,
+    knowledge:90,
+    discipline:80,
+    order:60,
+    sleep:70,
+    career:90,
+    finance:80,
+    mastery:80,
+    fallback:75
+  },
+  coinDivisor:5,
+  progression:{baseXP:500,linearIncrease:150}
+};
 const MILESTONES=[5,15,30,45];
 const starter=[
 {id:1,name:"Complete a workout",desc:"Strength training or cardio",xp:100,stat:"str",emoji:"🏋️"},
@@ -402,7 +429,7 @@ if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:1
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-function xpNeeded(){return 500 + (state.level-1)*150}
+function xpNeeded(){return CONFIG.progression.baseXP + (state.level-1)*CONFIG.progression.linearIncrease}
 function rank(){return state.level>=30?"S":state.level>=20?"A":state.level>=12?"B":state.level>=7?"C":state.level>=3?"D":"E"}
 function completedToday(){return state.tasks.filter(t=>state.completed[t.id]===today()).length}
 function render(){
@@ -416,11 +443,20 @@ document.getElementById("coins").textContent=state.coins.toLocaleString();
 document.getElementById("statusLevel").textContent="LEVEL "+state.level;
 let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. The System recognizes you as an S-Rank existence."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete. Your class now reflects your growth."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
 document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
-document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
+const dailyCount=state.tasks.filter(t=>t.daily||t.systemGenerated).slice(0,CONFIG.dailyQuestCount).length; const dailyCleared=state.tasks.filter(t=>(t.daily||t.systemGenerated)&&state.completed[t.id]===today()).slice(0,CONFIG.dailyQuestCount).length; document.getElementById("questCount").textContent=dailyCleared+" / "+dailyCount+" CLEARED";
 document.getElementById("streakText").textContent=state.streak+" DAYS";
 document.getElementById("streakBig").textContent=state.streak;
 const q=document.getElementById("questList");q.innerHTML="";
-state.tasks.forEach(t=>{let done=state.completed[t.id]===today();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"Custom System Task")}</small></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>openConfirm(t);q.appendChild(el)});
+const daily=state.tasks.filter(t=>t.daily||t.systemGenerated).slice(0,CONFIG.dailyQuestCount);
+const other=state.tasks.filter(t=>!daily.includes(t));
+daily.forEach(t=>{let done=state.completed[t.id]===today();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"System Quest")}</small></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>openConfirm(t);q.appendChild(el)});
+if(other.length){
+  const label=document.createElement("div");
+  label.className="section";
+  label.innerHTML="<b>OTHER SYSTEM TASKS</b><span>"+other.length+" AVAILABLE</span>";
+  q.appendChild(label);
+  other.forEach(t=>{let done=state.completed[t.id]===today();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"Custom System Task")}</small></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>openConfirm(t);q.appendChild(el)});
+}
 const a=document.getElementById("achList");const achievements=[
 ["FIRST AWAKENING","Complete your first task","first",state.xp>0],
 ["QUEST CLEARER","Clear 5 tasks","five",Object.keys(state.completed).length>=5],
@@ -525,18 +561,49 @@ function applyProfileQuests(){
   const objectives=Array.isArray(p.objectives)?p.objectives:[];
   const tags=[...goals,...objectives];
   const has=x=>tags.includes(x)||objectives.includes("All Paths");
-  const generated=[];
-  if(has("Fitness")||has("Physical Ascension")) generated.push({name:"System Training Protocol",desc:"Complete 30+ minutes of intentional exercise.",xp:90,stat:"str",emoji:"⚔️"});
-  if(has("Knowledge")||has("Knowledge Acquisition")) generated.push({name:"Knowledge Acquisition",desc:"Complete 30 minutes of focused learning.",xp:90,stat:"int",emoji:"🧠"});
-  if(has("Discipline")||has("Discipline")) generated.push({name:"Discipline Trial",desc:"Complete one task you have been putting off.",xp:80,stat:"dis",emoji:"🔥"});
-  if(has("Order")||has("Productivity")) generated.push({name:"Environment Reset",desc:"Spend 15 minutes organizing your space or schedule.",xp:60,stat:"dis",emoji:"📦"});
-  if(has("Sleep")) generated.push({name:"Sleep Protocol",desc:"Follow your planned bedtime routine tonight.",xp:70,stat:"dis",emoji:"😴"});
-  if(has("Career")||has("Career Advancement")) generated.push({name:"Career Progression",desc:"Spend 30 minutes on a career-building action.",xp:90,stat:"int",emoji:"⚔️"});
-  if(has("Finance")||has("Financial Ascension")) generated.push({name:"Financial Checkpoint",desc:"Spend 15 minutes reviewing or improving your finances.",xp:80,stat:"int",emoji:"💰"});
-  if(has("Mastery")||has("Mastery Pursuit")) generated.push({name:"Mastery Session",desc:"Practice a hobby or personal skill for 30 minutes.",xp:80,stat:"int",emoji:"🏆"});
-  if(!generated.length) generated.push({name:"System Initiation",desc:"Complete one meaningful action toward your goals today.",xp:75,stat:"dis",emoji:"✦"});
-  const existing=state.tasks.map(t=>t.name);
-  generated.slice(0,5).forEach(t=>{if(!existing.includes(t.name))state.tasks.push({id:"sys-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),...t,systemGenerated:true});});
+
+  // Remove previously generated Daily Quests so recalibration can safely
+  // produce a fresh set without touching custom/user-created tasks.
+  state.tasks=state.tasks.filter(t=>!t.systemGenerated);
+
+  const pool=[];
+  if(has("Fitness")||has("Physical Ascension"))
+    pool.push({name:"System Training Protocol",desc:"Complete 30+ minutes of intentional exercise.",xp:CONFIG.questXP.physical,stat:"str",emoji:"⚔️"});
+  if(has("Knowledge")||has("Knowledge Acquisition"))
+    pool.push({name:"Knowledge Acquisition",desc:"Complete 30 minutes of focused learning.",xp:CONFIG.questXP.knowledge,stat:"int",emoji:"🧠"});
+  if(has("Discipline"))
+    pool.push({name:"Discipline Trial",desc:"Complete one task you have been putting off.",xp:CONFIG.questXP.discipline,stat:"dis",emoji:"🔥"});
+  if(has("Order")||has("Productivity"))
+    pool.push({name:"Environment Reset",desc:"Spend 15 minutes organizing your space or schedule.",xp:CONFIG.questXP.order,stat:"dis",emoji:"📦"});
+  if(has("Sleep"))
+    pool.push({name:"Sleep Protocol",desc:"Follow your planned bedtime routine tonight.",xp:CONFIG.questXP.sleep,stat:"dis",emoji:"😴"});
+  if(has("Career")||has("Career Advancement"))
+    pool.push({name:"Career Progression",desc:"Spend 30 minutes on a career-building action.",xp:CONFIG.questXP.career,stat:"int",emoji:"⚔️"});
+  if(has("Finance")||has("Financial Ascension"))
+    pool.push({name:"Financial Checkpoint",desc:"Spend 15 minutes reviewing or improving your finances.",xp:CONFIG.questXP.finance,stat:"int",emoji:"💰"});
+  if(has("Mastery")||has("Mastery Pursuit"))
+    pool.push({name:"Mastery Session",desc:"Practice a hobby or personal skill for 30 minutes.",xp:CONFIG.questXP.mastery,stat:"int",emoji:"🏆"});
+
+  if(!pool.length)
+    pool.push({name:"System Initiation",desc:"Complete one meaningful action toward your goals today.",xp:CONFIG.questXP.fallback,stat:"dis",emoji:"✦"});
+
+  // If the profile only maps to one or two quest types, fill the remaining
+  // slots with useful general System tasks rather than exceeding the limit.
+  const fillers=[
+    {name:"Daily Momentum",desc:"Complete one small action that moves your life forward.",xp:70,stat:"dis",emoji:"⚡"},
+    {name:"Focus Protocol",desc:"Spend 20 minutes working without distractions.",xp:70,stat:"int",emoji:"🎯"},
+    {name:"Reset Protocol",desc:"Improve one part of your environment for 15 minutes.",xp:60,stat:"dis",emoji:"📦"}
+  ];
+  for(const f of fillers) if(pool.length<CONFIG.dailyQuestCount) pool.push(f);
+
+  pool.slice(0,CONFIG.dailyQuestCount).forEach((t,i)=>{
+    state.tasks.push({
+      id:"sys-"+Date.now()+"-"+i+"-"+Math.random().toString(36).slice(2,7),
+      ...t,
+      systemGenerated:true,
+      daily:true
+    });
+  });
 }
 function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();tab("home",document.querySelectorAll(".bottom button")[0]);show("SYSTEM INITIALIZED","Your profile is online. The System has generated your first personalized quests.");}
 function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
@@ -554,7 +621,7 @@ function milestoneEvent(level){
 }
 function complete(t){
 if(state.completed[t.id]===today())return;
-const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/5));state.stats[t.stat||"dis"]++;
+const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/CONFIG.coinDivisor));state.stats[t.stat||"dis"]++;
 const prev=state.lastDay;const d=today();if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
 while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++}
 save();render();if(!state.introSeen)document.getElementById("intro").classList.add("show");

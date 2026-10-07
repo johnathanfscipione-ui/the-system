@@ -1,3 +1,3 @@
-THE SYSTEM — Life RPG V8.2
+THE SYSTEM — Life RPG V8.3
 
-Visual polish build. Preserves the existing game logic and localStorage key.
+Three personalized Daily Quests. Quest XP and progression settings are centralized for future balancing. Existing localStorage key and game progression are preserved.
