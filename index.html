@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM // V8</title>
+<title>THE SYSTEM // V8.4</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -23,15 +23,32 @@ h1{font-size:27px;margin:4px 0 0}.sub{font-size:11px;color:var(--muted);margin:3
 .bottom{position:fixed;z-index:4;left:50%;transform:translateX(-50%);bottom:calc(8px + env(safe-area-inset-bottom));width:min(532px,calc(100% - 20px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:6px;background:#050812ed;border:1px solid #24385e;border-radius:14px;backdrop-filter:blur(16px)}.bottom button{background:#080d19;border:1px solid transparent;border-radius:8px;color:#7485a7;padding:9px 2px;font-size:9px}.bottom button.active{color:var(--cyan);border-color:#2b527f}
 .listrow{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #182743}.listrow:last-child{border-bottom:0}.icon{font-size:20px}.grow{flex:1}.muted{font-size:9px;color:var(--muted)}.gold{color:var(--gold)}
 .modal{position:fixed;z-index:10;inset:0;background:#02040bdd;display:none;place-items:center;padding:22px}.modal.show{display:grid}.modalbox{width:min(430px,100%);padding:25px;border-radius:18px;border:1px solid #4e72b1;background:linear-gradient(145deg,#101b37,#070a14);box-shadow:0 0 80px #3c75ff2b;text-align:center}.modalbox .sys{font-size:9px}.modalbox h2{font-size:26px;margin:10px 0 5px}.modalbox p{font-size:12px;color:#a6b5d0;line-height:1.5}.modalbox button{margin-top:8px;width:100%;padding:12px;border-radius:9px;border:1px solid #3c62a0;background:#0d2347;color:white;font-weight:800}
-input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;background:#060a13;color:white;outline:none;margin:5px 0}label{font-size:10px;color:#9cafcf}
+input,select{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;background:#060a13;color:white;outline:none;margin:5px 0}select{appearance:auto}label{font-size:10px;color:#9cafcf;display:block;margin-top:7px}
 
 .confirmBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.confirmBtns button:first-child{background:linear-gradient(90deg,#123d36,#0b2b28);border-color:#327b68}.confirmBtns button:last-child{background:#080e1b;border-color:#394967}
+/* V8.4 LEVEL UP EVENT */
+.levelup{position:fixed;z-index:60;inset:0;display:none;place-items:center;background:radial-gradient(circle at 50% 48%,#183d6ee8 0,#02050ddf 42%,#000106f5 78%);overflow:hidden;pointer-events:none}
+.levelup.show{display:grid;animation:levelupFadeIn .28s ease both}
+.levelup:before{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 25px 10px #5de7ff88,0 0 100px 45px #4388ff33;animation:levelupCore 1.5s ease-out both}
+.levelup:after{content:"";position:absolute;inset:-30%;background:repeating-conic-gradient(from 0deg,#5de7ff00 0deg 8deg,#5de7ff12 9deg 10deg,#5de7ff00 11deg 18deg);animation:levelupRays 1.7s ease-out both}
+.levelupBox{position:relative;z-index:2;text-align:center;width:min(430px,92vw);padding:30px 20px;border-top:1px solid #5de7ff77;border-bottom:1px solid #5de7ff55;background:linear-gradient(90deg,transparent,#07172de8,transparent);animation:levelupBox 1.1s cubic-bezier(.2,.9,.2,1) both}
+.levelupSys{font-size:9px;letter-spacing:4px;color:#86c8e8;font-weight:900;margin-bottom:10px}
+.levelupTitle{font-size:48px;letter-spacing:5px;font-weight:1000;color:#f4fbff;text-shadow:0 0 15px #5de7ff,0 0 45px #4388ff88;animation:levelupText 1.2s ease both}
+.levelupLevel{margin-top:7px;font-size:18px;letter-spacing:3px;color:var(--cyan);font-weight:900}
+.levelupGain{margin-top:15px;font-size:10px;letter-spacing:2px;color:#a9b9d7}
+.levelup.show .levelupTitle{animation-delay:.16s}
+@keyframes levelupFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes levelupCore{0%{transform:scale(.2);opacity:0}25%{opacity:1}100%{transform:scale(35);opacity:0}}
+@keyframes levelupRays{0%{transform:scale(.2) rotate(0);opacity:0}30%{opacity:1}100%{transform:scale(1.2) rotate(35deg);opacity:0}}
+@keyframes levelupBox{from{opacity:0;transform:scale(.82);filter:blur(8px)}45%{opacity:1;transform:scale(1.02);filter:blur(0)}to{transform:scale(1)}}
+@keyframes levelupText{from{opacity:0;transform:translateY(16px);letter-spacing:14px}to{opacity:1;transform:translateY(0);letter-spacing:5px}}
 .intro{position:fixed;z-index:20;inset:0;background:radial-gradient(circle at 50% 25%,#173b68,#070b17 50%,#010207);display:none;place-items:center;padding:28px}.intro.show{display:grid}.introbox{max-width:430px;text-align:center}.sigil{width:88px;height:88px;margin:0 auto 20px;border:1px solid #4e8dca;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);display:grid;place-items:center;background:#071329;box-shadow:0 0 50px #42d9ff33;color:var(--cyan);font-size:30px}.intro .sys{font-size:10px}.intro h1{font-size:36px;letter-spacing:6px}.intro p{color:#a8b8d3;line-height:1.6;font-size:13px}.glitch{animation:pulse 1.8s infinite}@keyframes pulse{50%{opacity:.55;filter:drop-shadow(0 0 12px #5de7ff)}}
 .herochar{border:1px solid #35558a;border-radius:15px;padding:20px;text-align:center;background:radial-gradient(circle at 50% 20%,#1c3161,#080c18 70%);margin-bottom:12px}.avatar{font-size:58px;margin:4px}.title{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:900}
 
 .assess{position:fixed;z-index:25;inset:0;background:radial-gradient(circle at 50% 15%,#183b68,#070b17 48%,#010207);display:none;place-items:center;padding:calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom))}.assess.show{display:grid}.assessbox{width:min(470px,100%);max-height:calc(100vh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 22px;border:1px solid #416aa6;border-radius:19px;background:linear-gradient(145deg,#101a35,#060912);box-shadow:0 0 90px #3c75ff2b;position:relative;scrollbar-width:thin}.scrollCue{display:none;position:sticky;bottom:0;margin:10px -2px -5px;padding:8px;text-align:center;border:1px solid #294b78;border-radius:9px;background:#071225ee;color:#8fcfff;font-size:9px;letter-spacing:1.5px;font-weight:800;backdrop-filter:blur(8px)}.scrollCue.show{display:block}.stepbar{height:5px;background:#111a2b;border-radius:99px;overflow:hidden;margin:12px 0 20px}.stepfill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:.25s}.assess h2{font-size:24px;margin:7px 0}.assess p{color:#9fb0cf;font-size:12px;line-height:1.5}.choicegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.choice{padding:13px 10px;text-align:left;border:1px solid #243d68;border-radius:11px;background:#080e1b;color:#dce9ff;font-size:11px}.choice.selected{border-color:var(--cyan);background:#0b2340;box-shadow:0 0 16px #5de7ff14}.choice small{display:block;color:#7387aa;margin-top:3px;font-size:8px}.assessnav{display:flex;gap:8px;margin-top:18px}.assessnav button{flex:1}.profilechip{margin-top:12px;padding:11px;border:1px solid #263f69;border-radius:10px;background:#080d19;color:#a9b9d7;font-size:10px}.profilechip b{color:var(--cyan)}
 
 /* V8 SYSTEM VISUAL LAYER */
+/* V8.4 RPG PROGRESSION */
 body{overflow-x:hidden;background:#02040a;color:var(--white)}
 body:before,body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1}
 body:before{background:radial-gradient(circle at 50% 0%,#12305a 0,transparent 34%),radial-gradient(circle at 15% 65%,#101c42 0,transparent 30%),radial-gradient(circle at 85% 80%,#1b1039 0,transparent 28%);opacity:.9}
@@ -349,9 +366,9 @@ body .app:before{
 <section id="character" class="screen">
 <div class="herochar"><div class="avatar" id="avatar">⚔️</div><div class="title">CURRENT CLASS</div><h1 id="className">UNAWAKENED</h1><div class="sub" id="classDesc">Your true class has not yet been revealed.</div></div>
 <div class="panel"><div class="sys">PLAYER STATUS</div><h1 id="statusLevel">LEVEL 1</h1><div class="sub">Every completed task contributes to your evolution.</div>
-<div class="listrow"><span class="icon">⚔️</span><div class="grow"><b>Strength</b><div class="muted">Physical training & action</div></div><strong id="cstr">10</strong></div>
-<div class="listrow"><span class="icon">🧠</span><div class="grow"><b>Intelligence</b><div class="muted">Study & learning</div></div><strong id="cint">10</strong></div>
-<div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Discipline</b><div class="muted">Consistency & difficult tasks</div></div><strong id="cdis">10</strong></div>
+<div class="listrow"><span class="icon">⚔️</span><div class="grow"><b>Strength</b><div class="muted">Physical quests • <span id="cstrProgress">0/6</span> toward +1</div></div><strong id="cstr">10</strong></div>
+<div class="listrow"><span class="icon">🧠</span><div class="grow"><b>Intelligence</b><div class="muted">Knowledge quests • <span id="cintProgress">0/6</span> toward +1</div></div><strong id="cint">10</strong></div>
+<div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Discipline</b><div class="muted">Discipline quests • <span id="cdisProgress">0/6</span> toward +1</div></div><strong id="cdis">10</strong></div>
 <div class="listrow"><span class="icon">🪙</span><div class="grow"><b>System Coins</b><div class="muted">Spend on personal rewards</div></div><strong id="coins">0</strong></div>
 <button class="btn secondary" onclick="openAssessment(true)">⚙️ RECALIBRATE SYSTEM PROFILE</button>
 </div>
@@ -377,7 +394,8 @@ body .app:before{
 </nav>
 
 <div id="modal" class="modal"><div class="modalbox"><div class="sys">SYSTEM NOTIFICATION</div><h2 id="modalTitle"></h2><p id="modalText"></p><button onclick="closeModal()">CONTINUE</button></div></div>
-<div id="createModal" class="modal"><div class="modalbox"><div class="sys">NEW SYSTEM TASK</div><h2>CREATE QUEST</h2><label>Task name</label><input id="newName" placeholder="e.g. Study calculus"><label>XP reward (10–500)</label><input id="newXP" type="number" value="50" min="10" max="500"><button onclick="createTask()">ADD TO SYSTEM</button><button class="btn secondary" onclick="closeCreate()">CANCEL</button></div></div>
+<div id="levelUp" class="levelup"><div class="levelupBox"><div class="levelupSys">SYSTEM NOTIFICATION // EVOLUTION DETECTED</div><div class="levelupTitle">LEVEL UP</div><div id="levelUpLevel" class="levelupLevel">LEVEL 2</div><div id="levelUpGain" class="levelupGain">PLAYER PROGRESSION INCREASED</div></div></div>
+<div id="createModal" class="modal"><div class="modalbox"><div class="sys">NEW SYSTEM TASK</div><h2>CREATE QUEST</h2><label>Task name</label><input id="newName" placeholder="e.g. Study calculus"><label>XP reward (10–100)</label><input id="newXP" type="number" value="25" min="10" max="100"><label>QUEST CATEGORY</label><select id="newStat"><option value="str">💪 Physical → Strength</option><option value="int">🧠 Knowledge → Intelligence</option><option value="dis" selected>🔥 Discipline → Discipline</option></select><button onclick="createTask()">ADD TO SYSTEM</button><button class="btn secondary" onclick="closeCreate()">CANCEL</button></div></div>
 
 
 <div id="confirmModal" class="modal"><div class="modalbox"><div class="sys">SYSTEM TASK VERIFICATION</div><h2>IS THIS TASK COMPLETE?</h2><p id="confirmText"></p><div class="confirmBtns"><button onclick="confirmTask()">YES — COMPLETE</button><button onclick="cancelTask()">NOT YET</button></div></div></div>
@@ -396,26 +414,28 @@ const KEY="life-system-v1";
 const CONFIG={
   dailyQuestCount:3,
   questXP:{
-    physical:90,
-    knowledge:90,
-    discipline:80,
-    order:60,
-    sleep:70,
-    career:90,
-    finance:80,
-    mastery:80,
-    fallback:75
+    physical:30,
+    knowledge:30,
+    discipline:25,
+    order:20,
+    sleep:25,
+    career:30,
+    finance:25,
+    mastery:25,
+    fallback:25,
+    filler:20
   },
   coinDivisor:5,
-  progression:{baseXP:500,linearIncrease:150}
+  statQuestRequirement:6,
+  progression:{baseXP:250,linearIncrease:50}
 };
 const MILESTONES=[5,15,30,45];
 const starter=[
-{id:1,name:"Complete a workout",desc:"Strength training or cardio",xp:100,stat:"str",emoji:"🏋️"},
-{id:2,name:"Study for 60 minutes",desc:"School, math, programming, or another skill",xp:100,stat:"int",emoji:"📚"},
-{id:3,name:"Reset your environment",desc:"Clean or organize for 15+ minutes",xp:50,stat:"dis",emoji:"🧹"},
-{id:4,name:"Hit your hydration goal",desc:"Complete your planned water target",xp:30,stat:"dis",emoji:"💧"},
-{id:5,name:"Protect your sleep",desc:"Get to bed at your target time",xp:75,stat:"dis",emoji:"😴"}];
+{id:1,name:"Complete a workout",desc:"Strength training or cardio",xp:30,stat:"str",emoji:"🏋️"},
+{id:2,name:"Study for 60 minutes",desc:"School, math, programming, or another skill",xp:30,stat:"int",emoji:"📚"},
+{id:3,name:"Reset your environment",desc:"Clean or organize for 15+ minutes",xp:20,stat:"dis",emoji:"🧹"},
+{id:4,name:"Hit your hydration goal",desc:"Complete your planned water target",xp:15,stat:"dis",emoji:"💧"},
+{id:5,name:"Protect your sleep",desc:"Get to bed at your target time",xp:25,stat:"dis",emoji:"😴"}];
 let pendingTask=null;
 let state=JSON.parse(localStorage.getItem(KEY)||"null");
 if(state && typeof state.introSeen==="undefined") state.introSeen=false;
@@ -423,9 +443,11 @@ if(state && typeof state.nameSet==="undefined") state.nameSet=!!state.name;
 if(state && typeof state.assessmentSeen==="undefined") state.assessmentSeen=!!state.introSeen;
 if(state && !state.profile) state.profile={goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""};
 if(state && !state.milestones) state.milestones={};
+if(state && !state.statProgress) state.statProgress={str:0,int:0,dis:0};
+if(state && state.statProgress){for(const k of ["str","int","dis"]){if(typeof state.statProgress[k]!=="number")state.statProgress[k]=0;state.statProgress[k]=Math.max(0,Math.min(CONFIG.statQuestRequirement-1,Math.floor(state.statProgress[k])));}}
 if(state && state.profile){state.profile.goals=Array.isArray(state.profile.goals)?state.profile.goals:[];state.profile.objectives=Array.isArray(state.profile.objectives)?state.profile.objectives:[];for(const k of ["state","time","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}for(const k of ["obstacle","motivation"]){state.profile[k]=Array.isArray(state.profile[k])?state.profile[k]:(state.profile[k]?[state.profile[k]]:[]);}}
 if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
-if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false}};
+if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false},statProgress:{str:0,int:0,dis:0}};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -439,6 +461,9 @@ document.getElementById("levelText").textContent="LV. "+state.level;
 document.getElementById("xpText").textContent=state.xp+" / "+xpNeeded()+" XP";
 document.getElementById("xpFill").style.width=Math.min(100,state.xp/xpNeeded()*100)+"%";
 for(const k of ["str","int","dis"]){document.getElementById(k).textContent=state.stats[k];document.getElementById("c"+k).textContent=state.stats[k]}
+document.getElementById("cstrProgress").textContent=state.statProgress.str+"/"+CONFIG.statQuestRequirement;
+document.getElementById("cintProgress").textContent=state.statProgress.int+"/"+CONFIG.statQuestRequirement;
+document.getElementById("cdisProgress").textContent=state.statProgress.dis+"/"+CONFIG.statQuestRequirement;
 document.getElementById("coins").textContent=state.coins.toLocaleString();
 document.getElementById("statusLevel").textContent="LEVEL "+state.level;
 let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. The System recognizes you as an S-Rank existence."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete. Your class now reflects your growth."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
@@ -590,9 +615,9 @@ function applyProfileQuests(){
   // If the profile only maps to one or two quest types, fill the remaining
   // slots with useful general System tasks rather than exceeding the limit.
   const fillers=[
-    {name:"Daily Momentum",desc:"Complete one small action that moves your life forward.",xp:70,stat:"dis",emoji:"⚡"},
-    {name:"Focus Protocol",desc:"Spend 20 minutes working without distractions.",xp:70,stat:"int",emoji:"🎯"},
-    {name:"Reset Protocol",desc:"Improve one part of your environment for 15 minutes.",xp:60,stat:"dis",emoji:"📦"}
+    {name:"Daily Momentum",desc:"Complete one small action that moves your life forward.",xp:CONFIG.questXP.filler,stat:"dis",emoji:"⚡"},
+    {name:"Focus Protocol",desc:"Spend 20 minutes working without distractions.",xp:CONFIG.questXP.filler,stat:"int",emoji:"🎯"},
+    {name:"Reset Protocol",desc:"Improve one part of your environment for 15 minutes.",xp:CONFIG.questXP.filler,stat:"dis",emoji:"📦"}
   ];
   for(const f of fillers) if(pool.length<CONFIG.dailyQuestCount) pool.push(f);
 
@@ -607,6 +632,30 @@ function applyProfileQuests(){
 }
 function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();tab("home",document.querySelectorAll(".bottom button")[0]);show("SYSTEM INITIALIZED","Your profile is online. The System has generated your first personalized quests.");}
 function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
+function awardStatProgress(t){
+  const k=t.stat||"dis";
+  if(!state.statProgress[k]) state.statProgress[k]=0;
+  state.statProgress[k]++;
+  if(state.statProgress[k]>=CONFIG.statQuestRequirement){
+    state.statProgress[k]=0;
+    state.stats[k]++;
+    return k;
+  }
+  return null;
+}
+function statName(k){return k==="str"?"STRENGTH":k==="int"?"INTELLIGENCE":"DISCIPLINE"}
+function showLevelUp(levelsGained,statGained){
+  document.getElementById("levelUpLevel").textContent="LEVEL "+state.level;
+  const parts=[];
+  parts.push(levelsGained>1?("+"+levelsGained+" LEVELS"):("LEVEL "+state.level+" ACHIEVED"));
+  if(statGained) parts.push("+1 "+statName(statGained));
+  document.getElementById("levelUpGain").textContent=parts.join("  •  ");
+  const el=document.getElementById("levelUp");
+  el.classList.remove("show");
+  void el.offsetWidth;
+  el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),1800);
+}
 function milestoneEvent(level){
   const events={
     5:["FIRST AWAKENING","AWAKENING REQUIREMENT MET\n\nYour body and mind have adapted to the System.\nA hidden power has been detected.\n\nCLASS EVOLUTION AVAILABLE","⚡"],
@@ -621,19 +670,31 @@ function milestoneEvent(level){
 }
 function complete(t){
 if(state.completed[t.id]===today())return;
-const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/CONFIG.coinDivisor));state.stats[t.stat||"dis"]++;
-const prev=state.lastDay;const d=today();if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
-while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++}
-save();render();if(!state.introSeen)document.getElementById("intro").classList.add("show");
+const oldLevel=state.level;
+state.completed[t.id]=today();
+state.xp+=Number(t.xp);
+state.coins+=Math.max(1,Math.round(t.xp/CONFIG.coinDivisor));
+const statGained=awardStatProgress(t);
+const prev=state.lastDay;const d=today();
+if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
+let levelsGained=0;
+while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++;levelsGained++}
+save();render();
+if(!state.introSeen)document.getElementById("intro").classList.add("show");
 const reached=MILESTONES.find(m=>m>oldLevel && state.level>=m && !state.milestones[m]);
-if(reached){ milestoneEvent(reached); return; }
-if(state.level>oldLevel){
-  show("LEVEL UP","LEVEL "+state.level+" ACHIEVED. Your character status has evolved.");
-  setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),650);
+if(levelsGained>0){
+  showLevelUp(levelsGained,statGained);
+  setTimeout(()=>{
+    if(reached){milestoneEvent(reached);return;}
+    tab("character",document.querySelectorAll(".bottom button")[1]);
+  },1900);
+  return;
 }
-else show("QUEST CLEARED","+"+t.xp+" XP  •  +"+Math.max(1,Math.round(t.xp/5))+" 🪙");
+if(reached){milestoneEvent(reached);return;}
+if(statGained) show("STAT INCREASED","+1 "+statName(statGained)+". Your progress toward the next point has reset to 0/"+CONFIG.statQuestRequirement+".");
+else show("QUEST CLEARED","+"+t.xp+" XP  •  +"+Math.max(1,Math.round(t.xp/CONFIG.coinDivisor))+" 🪙");
 }
-function createTask(){let n=document.getElementById("newName").value.trim();let x=Math.max(10,Math.min(500,Number(document.getElementById("newXP").value)||50));if(!n)return;let id=Date.now();state.tasks.push({id,name:n,desc:"Custom System Task",xp:x,stat:"dis",emoji:"⚔️"});save();closeCreate();render();show("SYSTEM TASK ADDED",n+" has been added to today's System.")}
+function createTask(){let n=document.getElementById("newName").value.trim();let x=Math.max(10,Math.min(100,Number(document.getElementById("newXP").value)||25));let stat=document.getElementById("newStat").value;if(!n)return;let id=Date.now();const emoji=stat==="str"?"💪":stat==="int"?"🧠":"🔥";state.tasks.push({id,name:n,desc:"Custom System Task",xp:x,stat,emoji});save();closeCreate();render();show("SYSTEM TASK ADDED",n+" has been added to today's System.")}
 function buy(cost,item){if(state.coins<cost){show("INSUFFICIENT COINS","The System denies this purchase. Earn more coins first.");return}state.coins-=cost;save();render();show("REWARD CLAIMED","Redeemed: "+item+". Enjoy it without guilt.");}
 function tab(id,btn){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".bottom button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
 function show(t,p){document.getElementById("modalTitle").textContent=t;document.getElementById("modalText").textContent=p;document.getElementById("modal").classList.add("show")}
