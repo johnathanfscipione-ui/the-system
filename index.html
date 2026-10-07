@@ -28,6 +28,8 @@ input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;backgro
 .confirmBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.confirmBtns button:first-child{background:linear-gradient(90deg,#123d36,#0b2b28);border-color:#327b68}.confirmBtns button:last-child{background:#080e1b;border-color:#394967}
 .intro{position:fixed;z-index:20;inset:0;background:radial-gradient(circle at 50% 25%,#173b68,#070b17 50%,#010207);display:none;place-items:center;padding:28px}.intro.show{display:grid}.introbox{max-width:430px;text-align:center}.sigil{width:88px;height:88px;margin:0 auto 20px;border:1px solid #4e8dca;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);display:grid;place-items:center;background:#071329;box-shadow:0 0 50px #42d9ff33;color:var(--cyan);font-size:30px}.intro .sys{font-size:10px}.intro h1{font-size:36px;letter-spacing:6px}.intro p{color:#a8b8d3;line-height:1.6;font-size:13px}.glitch{animation:pulse 1.8s infinite}@keyframes pulse{50%{opacity:.55;filter:drop-shadow(0 0 12px #5de7ff)}}
 .herochar{border:1px solid #35558a;border-radius:15px;padding:20px;text-align:center;background:radial-gradient(circle at 50% 20%,#1c3161,#080c18 70%);margin-bottom:12px}.avatar{font-size:58px;margin:4px}.title{color:var(--cyan);font-size:10px;letter-spacing:2px;font-weight:900}
+
+.assess{position:fixed;z-index:25;inset:0;background:radial-gradient(circle at 50% 15%,#183b68,#070b17 48%,#010207);display:none;place-items:center;padding:20px}.assess.show{display:grid}.assessbox{width:min(470px,100%);max-height:92vh;overflow:auto;padding:24px;border:1px solid #416aa6;border-radius:19px;background:linear-gradient(145deg,#101a35,#060912);box-shadow:0 0 90px #3c75ff2b}.stepbar{height:5px;background:#111a2b;border-radius:99px;overflow:hidden;margin:12px 0 20px}.stepfill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:.25s}.assess h2{font-size:24px;margin:7px 0}.assess p{color:#9fb0cf;font-size:12px;line-height:1.5}.choicegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.choice{padding:13px 10px;text-align:left;border:1px solid #243d68;border-radius:11px;background:#080e1b;color:#dce9ff;font-size:11px}.choice.selected{border-color:var(--cyan);background:#0b2340;box-shadow:0 0 16px #5de7ff14}.choice small{display:block;color:#7387aa;margin-top:3px;font-size:8px}.assessnav{display:flex;gap:8px;margin-top:18px}.assessnav button{flex:1}.profilechip{margin-top:12px;padding:11px;border:1px solid #263f69;border-radius:10px;background:#080d19;color:#a9b9d7;font-size:10px}.profilechip b{color:var(--cyan)}
 </style>
 </head>
 <body>
@@ -54,6 +56,7 @@ input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;backgro
 <div class="listrow"><span class="icon">🧠</span><div class="grow"><b>Intelligence</b><div class="muted">Study & learning</div></div><strong id="cint">10</strong></div>
 <div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Discipline</b><div class="muted">Consistency & difficult tasks</div></div><strong id="cdis">10</strong></div>
 <div class="listrow"><span class="icon">🪙</span><div class="grow"><b>System Coins</b><div class="muted">Spend on personal rewards</div></div><strong id="coins">0</strong></div>
+<button class="btn secondary" onclick="openAssessment(true)">⚙️ RECALIBRATE SYSTEM PROFILE</button>
 </div>
 </section>
 
@@ -82,6 +85,12 @@ input{width:100%;padding:12px;border-radius:9px;border:1px solid #29426e;backgro
 
 <div id="confirmModal" class="modal"><div class="modalbox"><div class="sys">SYSTEM TASK VERIFICATION</div><h2>IS THIS TASK COMPLETE?</h2><p id="confirmText"></p><div class="confirmBtns"><button onclick="confirmTask()">YES — COMPLETE</button><button onclick="cancelTask()">NOT YET</button></div></div></div>
 <div id="intro" class="intro"><div class="introbox"><div class="sigil glitch">✦</div><div class="sys">SYSTEM CONNECTION ESTABLISHED</div><h1>AWAKEN</h1><p>A system has appeared before you. It does not care who you were yesterday. It only measures what you do next.</p><button class="btn" onclick="finishIntro()">ACCEPT THE SYSTEM</button></div></div>
+<div id="assessment" class="assess"><div class="assessbox">
+<div class="sys">SYSTEM INITIAL ASSESSMENT</div><h2 id="assessTitle">IDENTIFY YOUR OBJECTIVES</h2><p id="assessPrompt">The System must understand what you want to improve before it can shape your quests.</p>
+<div class="stepbar"><div id="stepFill" class="stepfill" style="width:33%"></div></div>
+<div id="choiceArea"></div><div id="profilePreview" class="profilechip hidden"></div>
+<div class="assessnav"><button id="assessBack" class="btn secondary" onclick="assessmentBack()">BACK</button><button id="assessNext" class="btn" onclick="assessmentNext()">CONTINUE</button></div>
+</div></div>
 <script>
 const KEY="life-system-v1";
 const MILESTONES=[5,15,30,45];
@@ -94,9 +103,11 @@ const starter=[
 let pendingTask=null;
 let state=JSON.parse(localStorage.getItem(KEY)||"null");
 if(state && typeof state.introSeen==="undefined") state.introSeen=false;
+if(state && typeof state.assessmentSeen==="undefined") state.assessmentSeen=!!state.introSeen;
+if(state && !state.profile) state.profile={goals:[],activity:"",time:"",primary:""};
 if(state && !state.milestones) state.milestones={};
 if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
-if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,milestones:{5:false,15:false,30:false,45:false}};
+if(!state) state={name:"JOHNATHAN",xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],activity:"",time:"",primary:""},milestones:{5:false,15:false,30:false,45:false}};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -148,7 +159,22 @@ function finishIntro(){
   state.introSeen=true;
   save();
   document.getElementById("intro").classList.remove("show");
+  if(!state.assessmentSeen) openAssessment(false);
 }
+const assessmentData=[
+ {title:"WHAT DO YOU WANT TO IMPROVE?",prompt:"Choose everything that matters to you. The System will use these goals to recommend quests.",type:"multi",key:"goals",options:[
+  ["💪","Physical Fitness","Strength, movement, endurance"],["🥗","Health & Nutrition","Hydration, food, healthy habits"],["🧠","Knowledge / Education","School, learning, new skills"],["💰","Career / Finances","Work, money, career progress"],["🔥","Mental Discipline","Consistency, focus, self-control"],["🧹","Organization","Cleanliness, routines, life admin"],["😴","Sleep","Better sleep and recovery"],["👥","Social Life","Friends, family, confidence"]]},
+ {title:"WHAT IS YOUR CURRENT ACTIVITY LEVEL?",prompt:"The System should challenge you without setting you up to fail.",type:"single",key:"activity",options:[["🌱","Just starting","I am building consistency"],["⚔️","Somewhat active","I do things regularly"],["🔥","Very active","I already train or stay busy"]]},
+ {title:"HOW MUCH TIME CAN YOU REALISTICALLY GIVE THE SYSTEM?",prompt:"Choose what you can consistently maintain, not your perfect day.",type:"single",key:"time",options:[["⏱️","15–30 minutes","Short daily sessions"],["⏳","30–60 minutes","A solid daily block"],["🕐","1–2 hours","I can commit more time"],["⚡","2+ hours","The System can push me harder"]]},
+ {title:"WHAT IS YOUR #1 OBJECTIVE?",prompt:"This becomes the System's primary direction when generating quests.",type:"single",key:"primary",options:[["💪","Get stronger","Build physical capability"],["🥗","Get healthier","Build healthier habits"],["🧠","Learn more","Improve knowledge and skills"],["🔥","Build discipline","Become more consistent"],["⚔️","Become more productive","Get more done"],["🌟","Improve my overall life","Balanced progression"]]}
+];
+let assessStep=0,assessRetake=false;
+function openAssessment(retake){assessRetake=!!retake;assessStep=0;document.getElementById("assessment").classList.add("show");renderAssessment();}
+function renderAssessment(){const d=assessmentData[assessStep];document.getElementById("assessTitle").textContent=d.title;document.getElementById("assessPrompt").textContent=d.prompt;document.getElementById("stepFill").style.width=((assessStep+1)/assessmentData.length*100)+"%";document.getElementById("assessBack").style.visibility=assessStep?"visible":"hidden";document.getElementById("assessNext").textContent=assessStep===assessmentData.length-1?"INITIALIZE SYSTEM":"CONTINUE";const cur=state.profile[d.key]||[];const selected=Array.isArray(cur)?cur:[cur];document.getElementById("choiceArea").innerHTML='<div class="choicegrid">'+d.options.map((o,i)=>`<button class="choice ${selected.includes(o[1])?"selected":""}" onclick="selectAssessment(${i})">${o[0]} <b>${o[1]}</b><small>${o[2]}</small></button>`).join('')+'</div>';document.getElementById("profilePreview").classList.add("hidden");}
+function selectAssessment(i){const d=assessmentData[assessStep],v=d.options[i][1];if(d.type==="multi"){let a=Array.isArray(state.profile[d.key])?state.profile[d.key]:[];a=a.includes(v)?a.filter(x=>x!==v):[...a,v];state.profile[d.key]=a;}else state.profile[d.key]=v;save();renderAssessment();}
+function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();show("SYSTEM PROFILE COMPLETE","Your objectives have been recorded. The System will now shape future quests around your chosen path.");}
+function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
+function applyProfileQuests(){if(state.profile.goals.includes("Health & Nutrition")&&!state.tasks.some(t=>t.profileTag==="health")){state.tasks.push({id:"p_health",name:"Hydration Protocol",desc:"Complete your planned water target",xp:40,stat:"dis",emoji:"💧",profileTag:"health"});}if(state.profile.goals.includes("Knowledge / Education")&&!state.tasks.some(t=>t.profileTag==="learning")){state.tasks.push({id:"p_learning",name:"Knowledge Acquisition",desc:"Study or learn for 30 minutes",xp:60,stat:"int",emoji:"🧠",profileTag:"learning"});}if(state.profile.goals.includes("Physical Fitness")&&!state.tasks.some(t=>t.profileTag==="fitness")){state.tasks.push({id:"p_fitness",name:"Body Conditioning",desc:"Complete 30 minutes of physical activity",xp:75,stat:"str",emoji:"⚔️",profileTag:"fitness"});}if(state.profile.goals.includes("Organization")&&!state.tasks.some(t=>t.profileTag==="organization")){state.tasks.push({id:"p_organization",name:"Environment Reset",desc:"Clean or organize for 15 minutes",xp:50,stat:"dis",emoji:"🧹",profileTag:"organization"});}if(state.profile.goals.includes("Sleep")&&!state.tasks.some(t=>t.profileTag==="sleep")){state.tasks.push({id:"p_sleep",name:"Recovery Protocol",desc:"Follow your planned sleep target",xp:60,stat:"dis",emoji:"😴",profileTag:"sleep"});}}
 function milestoneEvent(level){
   const events={
     5:["FIRST AWAKENING","AWAKENING REQUIREMENT MET\n\nYour body and mind have adapted to the System.\nA hidden power has been detected.\n\nCLASS EVOLUTION AVAILABLE","⚡"],
