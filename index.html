@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM // V8</title>
+<title>THE SYSTEM // V9.3</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -102,6 +102,12 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 /* identity */
 .identity{position:fixed;z-index:101;inset:0;background:radial-gradient(circle at 50% 25%,#123a63,#070b17 48%,#010207);display:none;place-items:center;padding:28px}.identity.show{display:grid}.identitybox{width:min(390px,100%);text-align:center}.identitybox .sys{margin-bottom:14px}.identitybox h2{font-size:26px;letter-spacing:3px;margin:0 0 18px}.identitybox input{font-size:16px;text-align:center;padding:15px 12px;border-color:#3c6598}.identityConfirm{display:none}.identityConfirm.show{display:block}.identityConfirm h2{color:var(--cyan);text-shadow:0 0 18px #5de7ff55}.identityName{font-size:29px;font-weight:900;margin:7px 0 18px}
 @media(max-width:390px){.choicegrid{grid-template-columns:1fr}.herochar{min-height:225px}.startupText{font-size:21px}.startupSigil{width:96px;height:96px}}
+
+/* V9.3 CHARACTER SYSTEM */
+.charMenu{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:5px;margin:0 0 12px;background:#050a14;border:1px solid #20365d;border-radius:12px;position:sticky;top:4px;z-index:2;backdrop-filter:blur(12px)}
+.charMenu button{border:1px solid transparent;border-radius:8px;background:#080e1a;color:#7185a8;padding:10px 3px;font-size:8px;font-weight:900;letter-spacing:.7px}.charMenu button.active{color:var(--cyan);border-color:#2c6089;background:#0a1b2d;box-shadow:inset 0 0 14px #5de7ff0d}
+.charPane{display:none}.charPane.active{display:block;animation:paneIn .22s ease}.charHeroV9{position:relative;overflow:hidden;border:1px solid #35558a;border-radius:18px;padding:22px 18px;text-align:center;background:radial-gradient(circle at 50% 20%,#17345f,#080c18 68%);box-shadow:0 0 35px #4388ff10,inset 0 0 30px #5de7ff08;margin-bottom:10px}.charHeroV9:after{content:"";position:absolute;left:-20%;right:-20%;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:heroScan 3s linear infinite}.charAvatarV9{font-size:64px;line-height:1;margin:4px 0 8px;filter:drop-shadow(0 0 18px #5de7ff55);animation:floatAvatar 2.8s ease-in-out infinite}.charNameV9{font-size:25px;letter-spacing:2px;margin:4px 0}.charRankV9{display:inline-block;margin-top:8px;padding:5px 9px;border:1px solid #5e4c20;border-radius:6px;background:#171205;color:var(--gold);font-size:9px;font-weight:900;letter-spacing:1.5px}.charXP{margin-top:15px;text-align:left}.charXP .row{font-size:9px}.miniGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.miniStat{padding:11px 8px;text-align:center;border:1px solid #20365d;border-radius:11px;background:#060b15}.miniStat b{display:block;font-size:20px}.miniStat span{font-size:7px;letter-spacing:1px;color:var(--muted)}.sectionLabelV9{font-size:9px;letter-spacing:2px;color:var(--cyan);font-weight:900;margin:15px 2px 7px}.slotGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.slot{min-height:92px;border:1px solid #20365d;border-radius:12px;background:linear-gradient(145deg,#0a1120,#050913);padding:12px;display:flex;flex-direction:column;justify-content:space-between}.slot .slotIcon{font-size:23px;opacity:.9}.slot b{font-size:10px}.slot small{color:#657b9e;font-size:8px}.slot.locked{opacity:.62;border-style:dashed}.lockedTag{color:#6f86a9;font-size:7px;letter-spacing:1px;font-weight:900}.inventoryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.invSlot{aspect-ratio:1;border:1px solid #20365d;border-radius:10px;background:#050a13;display:grid;place-items:center;font-size:22px;color:#536b90}.titleCard{padding:13px;border:1px solid #20365d;border-radius:11px;background:#080e1a}.titleCard b{color:#8fa8cb}.titleCard p{margin:4px 0 0;color:#667c9d;font-size:9px}.futureNote{padding:12px;border:1px dashed #31517d;border-radius:11px;background:#07101d;color:#7890b2;font-size:9px;line-height:1.5;text-align:center}.futureNote strong{color:var(--cyan)}
+@keyframes paneIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}@keyframes heroScan{from{transform:translateX(-30%)}to{transform:translateX(30%)}}
 </style>
 </head>
 <body>
@@ -122,13 +128,34 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 </section>
 
 <section id="character" class="screen">
-<div class="herochar"><div class="avatar" id="avatar">⚔️</div><div class="title">CURRENT CLASS</div><h1 id="className">UNAWAKENED</h1><div class="sub" id="classDesc">Your true class has not yet been revealed.</div></div>
-<div class="panel"><div class="sys">PLAYER STATUS</div><h1 id="statusLevel">LEVEL 1</h1><div class="sub">Every completed task contributes to your evolution.</div>
-<div class="listrow"><span class="icon">⚔️</span><div class="grow"><b>Strength</b><div class="muted">Physical training & action</div></div><strong id="cstr">10</strong></div>
-<div class="listrow"><span class="icon">🧠</span><div class="grow"><b>Intelligence</b><div class="muted">Study & learning</div></div><strong id="cint">10</strong></div>
-<div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Discipline</b><div class="muted">Consistency & difficult tasks</div></div><strong id="cdis">10</strong></div>
-<div class="listrow"><span class="icon">🪙</span><div class="grow"><b>System Coins</b><div class="muted">Spend on personal rewards</div></div><strong id="coins">0</strong></div>
-<button class="btn secondary" onclick="openAssessment(true)">⚙️ RECALIBRATE SYSTEM PROFILE</button>
+<div class="charMenu">
+<button class="active" onclick="charTab('overview',this)">CHARACTER</button>
+<button onclick="charTab('equipment',this)">EQUIPMENT</button>
+<button onclick="charTab('abilities',this)">ABILITIES</button>
+<button onclick="charTab('inventory',this)">INVENTORY</button>
+</div>
+
+<div id="char-overview" class="charPane active">
+<div class="charHeroV9"><div class="title">PLAYER CHARACTER</div><div class="charAvatarV9" id="avatar">⚔️</div><h1 class="charNameV9" id="charPlayerName">PLAYER</h1><div class="sub" id="classDesc">Your true class has not yet been revealed.</div><div class="charRankV9" id="charRank">E-RANK</div><div class="charXP"><div class="row"><span id="charXPText">0 / 500 XP</span><span id="charLevelText">LEVEL 1</span></div><div class="bar"><div id="charXPFill" class="fill"></div></div></div></div>
+<div class="miniGrid"><div class="miniStat"><b id="cstr">10</b><span>STRENGTH</span></div><div class="miniStat"><b id="cint">10</b><span>INTELLIGENCE</span></div><div class="miniStat"><b id="cdis">10</b><span>DISCIPLINE</span></div></div>
+<div class="sectionLabelV9">PROGRESSION</div>
+<div class="panel"><div class="listrow"><span class="icon">⚡</span><div class="grow"><b>Awakening</b><div class="muted">Level 5 — Class Selection</div></div><strong id="awakeningState">LOCKED</strong></div><div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Class Evolution</b><div class="muted">Level 15 — Evolution</div></div><strong>LOCKED</strong></div><div class="listrow"><span class="icon">👑</span><div class="grow"><b>Final Evolution</b><div class="muted">Level 45 — System Sovereign</div></div><strong>LOCKED</strong></div></div>
+<div class="sectionLabelV9">SYSTEM PROFILE</div><button class="btn secondary" onclick="openAssessment(true)">⚙️ RECALIBRATE SYSTEM PROFILE</button>
+</div>
+
+<div id="char-equipment" class="charPane">
+<div class="panel"><div class="sys">EQUIPMENT</div><h1>LOADOUT</h1><div class="sub">Your equipment will evolve with your character.</div><div class="slotGrid">
+<div class="slot"><span class="slotIcon">⚔️</span><div><b>WEAPON</b><br><small>Empty slot</small></div></div><div class="slot"><span class="slotIcon">🛡️</span><div><b>ARMOR</b><br><small>Empty slot</small></div></div><div class="slot"><span class="slotIcon">💠</span><div><b>ACCESSORY</b><br><small>Empty slot</small></div></div><div class="slot"><span class="slotIcon">🏷️</span><div><b>TITLE</b><br><small>None equipped</small></div></div></div></div>
+<div class="futureNote">Equipment is <strong>prepared for future progression</strong>. Items will become meaningful rewards rather than clutter.</div>
+</div>
+
+<div id="char-abilities" class="charPane">
+<div class="panel"><div class="sys">ABILITY SYSTEM</div><h1>ABILITIES</h1><div class="sub">Abilities will be unlocked through awakening and class progression.</div><div class="slotGrid"><div class="slot locked"><span class="slotIcon">✦</span><div><b>PASSIVE</b><br><small>Class required</small></div><span class="lockedTag">LOCKED</span></div><div class="slot locked"><span class="slotIcon">⚡</span><div><b>ACTIVE</b><br><small>Class required</small></div><span class="lockedTag">LOCKED</span></div><div class="slot locked"><span class="slotIcon">◆</span><div><b>SIGNATURE</b><br><small>Awakening required</small></div><span class="lockedTag">LOCKED</span></div><div class="slot locked"><span class="slotIcon">☄️</span><div><b>ULTIMATE</b><br><small>Future evolution</small></div><span class="lockedTag">LOCKED</span></div></div></div>
+</div>
+
+<div id="char-inventory" class="charPane">
+<div class="panel"><div class="sys">INVENTORY</div><h1>ITEMS</h1><div class="sub">0 / 20 slots used</div><div class="inventoryGrid">${Array(20).fill('<div class="invSlot">·</div>').join('')}</div></div>
+<div class="sectionLabelV9">TITLES</div><div class="titleCard"><b>NO TITLE EQUIPPED</b><p>Titles will be earned through achievements, milestones, and rare System events.</p></div>
 </div>
 </section>
 
@@ -182,9 +209,12 @@ if(state && typeof state.nameSet==="undefined") state.nameSet=!!state.name;
 if(state && typeof state.assessmentSeen==="undefined") state.assessmentSeen=!!state.introSeen;
 if(state && !state.profile) state.profile={goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""};
 if(state && !state.milestones) state.milestones={};
+if(state && !state.equipment) state.equipment={weapon:null,armor:null,accessory:null,title:null};
+if(state && !state.inventory) state.inventory=[];
+if(state && !state.abilities) state.abilities=[];
 if(state && state.profile){state.profile.goals=Array.isArray(state.profile.goals)?state.profile.goals:[];state.profile.objectives=Array.isArray(state.profile.objectives)?state.profile.objectives:[];for(const k of ["state","time","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}for(const k of ["obstacle","motivation"]){state.profile[k]=Array.isArray(state.profile[k])?state.profile[k]:(state.profile[k]?[state.profile[k]]:[]);}}
 if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
-if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false}};
+if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false},equipment:{weapon:null,armor:null,accessory:null,title:null},inventory:[],abilities:[]};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -200,6 +230,13 @@ document.getElementById("xpFill").style.width=Math.min(100,state.xp/xpNeeded()*1
 for(const k of ["str","int","dis"]){document.getElementById(k).textContent=state.stats[k];document.getElementById("c"+k).textContent=state.stats[k]}
 document.getElementById("coins").textContent=state.coins.toLocaleString();
 document.getElementById("statusLevel").textContent="LEVEL "+state.level;
+document.getElementById("charPlayerName").textContent=state.name||"PLAYER";
+document.getElementById("charRank").textContent=rank()+"-RANK";
+document.getElementById("charLevelText").textContent="LEVEL "+state.level;
+document.getElementById("charXPText").textContent=state.xp+" / "+xpNeeded()+" XP";
+document.getElementById("charXPFill").style.width=Math.min(100,state.xp/xpNeeded()*100)+"%";
+document.getElementById("awakeningState").textContent=state.level>=5?"AVAILABLE":"LOCKED";
+
 let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. The System recognizes you as an S-Rank existence."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete. Your class now reflects your growth."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
 document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
 document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
@@ -216,6 +253,7 @@ const a=document.getElementById("achList");const achievements=[
 a.innerHTML=achievements.map(x=>`<div class="listrow"><span class="icon">${x[3]?"🏆":"🔒"}</span><div class="grow"><b>${x[0]}</b><div class="muted">${x[1]}</div></div><strong>${x[3]?"UNLOCKED":"LOCKED"}</strong></div>`).join("");
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function charTab(id,btn){document.querySelectorAll('.charPane').forEach(x=>x.classList.remove('active'));document.getElementById('char-'+id).classList.add('active');document.querySelectorAll('.charMenu button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');}
 function openConfirm(t){
   pendingTask=t;
   document.getElementById("confirmText").textContent='The System is asking you to verify: "'+t.name+'".';
