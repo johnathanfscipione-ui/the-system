@@ -1,1 +1,9 @@
-{"name":"The System — Life RPG","short_name":"The System","start_url":"./index.html","display":"standalone","background_color":"#03050c","theme_color":"#050713"}
+{
+  "name":"The System — Life RPG",
+  "short_name":"The System",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#03050c",
+  "theme_color":"#050713",
+  "description":"A personal anime-inspired life RPG system."
+}

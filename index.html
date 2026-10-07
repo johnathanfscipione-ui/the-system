@@ -82,6 +82,81 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 /* identity */
 .identity{position:fixed;z-index:101;inset:0;background:radial-gradient(circle at 50% 25%,#123a63,#070b17 48%,#010207);display:none;place-items:center;padding:28px}.identity.show{display:grid}.identitybox{width:min(390px,100%);text-align:center}.identitybox .sys{margin-bottom:14px}.identitybox h2{font-size:26px;letter-spacing:3px;margin:0 0 18px}.identitybox input{font-size:16px;text-align:center;padding:15px 12px;border-color:#3c6598}.identityConfirm{display:none}.identityConfirm.show{display:block}.identityConfirm h2{color:var(--cyan);text-shadow:0 0 18px #5de7ff55}.identityName{font-size:29px;font-weight:900;margin:7px 0 18px}
 @media(max-width:390px){.choicegrid{grid-template-columns:1fr}.herochar{min-height:225px}.startupText{font-size:21px}.startupSigil{width:96px;height:96px}}
+
+/* V8.1 — CINEMATIC SYSTEM PLAYER */
+#home>.panel:first-child{
+  min-height:285px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 35%,#173d6b 0,transparent 32%),
+    linear-gradient(145deg,#0b1429ee,#04070ff5);
+  border-color:#315789;
+  box-shadow:0 0 55px #4388ff22,inset 0 0 55px #5de7ff0b;
+}
+#home>.panel:first-child:before{
+  height:2px;
+  opacity:.9;
+  box-shadow:0 0 12px #5de7ff55;
+}
+#home>.panel:first-child .sys{
+  font-size:9px;
+  letter-spacing:3.5px;
+  margin-bottom:8px;
+}
+#home>.panel:first-child h1{
+  position:relative;
+  font-size:34px;
+  letter-spacing:2px;
+  text-shadow:0 0 24px #5de7ff35;
+  margin:2px 0 4px;
+}
+#home>.panel:first-child .sub{
+  margin-bottom:20px;
+}
+#home>.panel:first-child .bar{
+  width:100%;
+  height:10px;
+  margin-top:2px;
+}
+#home>.panel:first-child .row{
+  font-size:10px;
+  margin-top:8px;
+}
+#home>.panel:first-child .stats{
+  margin-top:20px;
+}
+#home>.panel:first-child .stat{
+  padding:11px 7px;
+  background:#050a14cc;
+  border-color:#28466f;
+}
+#home>.panel:first-child .stat b{
+  font-size:20px;
+  text-shadow:0 0 12px #5de7ff22;
+}
+#home>.panel:first-child .stat span{
+  font-size:7px;
+}
+#rank{
+  position:relative;
+  box-shadow:0 0 22px #ffd56b22;
+}
+#rank:before{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border-radius:8px;
+  border:1px solid #ffd56b12;
+  pointer-events:none;
+}
+@media(max-width:390px){
+  #home>.panel:first-child{min-height:265px}
+  #home>.panel:first-child h1{font-size:30px}
+}
+
 </style>
 </head>
 <body>
@@ -91,7 +166,7 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 <section id="home" class="screen active">
 <div class="panel">
 <div class="sys">SYSTEM USER // ACTIVE</div><h1 id="playerName">JOHNATHAN</h1><div class="sub">The System has recognized your potential.</div>
-<div class="bar"><div id="xpFill" class="fill"></div></div><div class="row"><span id="xpText"></span><span id="levelText"></span></div>
+<div class="sys" style="font-size:8px;letter-spacing:2px;opacity:.72;margin-bottom:5px">PROGRESSION CORE</div><div class="bar"><div id="xpFill" class="fill"></div></div><div class="row"><span id="xpText"></span><span id="levelText"></span></div>
 <div class="stats"><div class="stat"><b id="str">10</b><span>STRENGTH</span></div><div class="stat"><b id="int">10</b><span>INTELLIGENCE</span></div><div class="stat"><b id="dis">10</b><span>DISCIPLINE</span></div></div>
 </div>
 <div class="section"><b>SYSTEM TASKS</b><span id="questCount"></span></div>

@@ -1,3 +1,3 @@
-THE SYSTEM — Life RPG v6
-7-question adaptive System Profile with dynamic Q2, back navigation, iPhone-first scrolling, and progress-safe recalibration.
-Existing player progress is preserved using the existing localStorage key.
+THE SYSTEM — V8.1
+
+Visual-only upgrade to the V8 build. Preserves the existing questionnaire, progression, quests, localStorage key, and milestone system.
