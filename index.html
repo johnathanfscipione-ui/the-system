@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM // V8.5</title>
+<title>THE SYSTEM // V9.1</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -63,27 +63,37 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 .bottom button{transition:.2s}.bottom button.active{box-shadow:inset 0 0 16px #5de7ff10,0 0 14px #5de7ff0d}
 .btn{box-shadow:0 0 16px #4388ff10;transition:.2s}.btn:active{transform:scale(.985);box-shadow:0 0 22px #5de7ff20}
 .modalbox{backdrop-filter:blur(14px)}
-/* startup */
-.startup{position:fixed;z-index:100;inset:0;background:#010207;display:grid;place-items:center;padding:24px;overflow:hidden}
-.startup.hide{animation:startupOut .45s ease forwards;pointer-events:none}
-.startup:before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 50% 45%,#123d6d 0,transparent 25%),radial-gradient(circle at 50% 50%,#5de7ff08 0,transparent 48%);animation:startupGlow 2.4s ease-in-out infinite}
-.startupgrid{position:absolute;inset:-10%;background-image:linear-gradient(#5de7ff0a 1px,transparent 1px),linear-gradient(90deg,#5de7ff0a 1px,transparent 1px);background-size:44px 44px;transform:perspective(500px) rotateX(58deg) translateY(20%);transform-origin:center bottom;animation:startGrid 2.8s linear infinite}
-@keyframes startGrid{to{background-position:0 44px,44px 0}}
-@keyframes startupGlow{50%{transform:scale(1.18);opacity:.7}}
-.startupCore{position:relative;width:min(360px,88vw);text-align:center;color:var(--white)}
-.startupSigil{width:112px;height:112px;margin:0 auto 26px;display:grid;place-items:center;border:1px solid #5de7ff88;clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);background:linear-gradient(145deg,#071a31,#050814);box-shadow:0 0 25px #5de7ff44,0 0 80px #4388ff22;animation:sigilIn 1.2s ease both,sigilPulse 2s ease-in-out 1.1s infinite}
-.startupSigil:before{content:"✦";font-size:42px;color:var(--cyan);text-shadow:0 0 25px #5de7ff}
-@keyframes sigilIn{from{opacity:0;transform:scale(.45) rotate(-20deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-@keyframes sigilPulse{50%{box-shadow:0 0 45px #5de7ff66,0 0 120px #4388ff35}}
-.startupLabel{font-size:10px;letter-spacing:4px;color:#7fb9d7;font-weight:900}.startupText{font-size:25px;letter-spacing:3px;font-weight:900;margin-top:12px;min-height:35px;text-shadow:0 0 18px #5de7ff55}.startupLine{width:0;height:1px;margin:17px auto 0;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:lineGrow 1.5s .35s ease forwards}
-@keyframes lineGrow{to{width:85%}}
-.startupSkip{position:absolute;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));padding:10px 13px;border:1px solid #315488;border-radius:9px;background:#06101dcc;color:#9bc5df;font-size:9px;font-weight:800;letter-spacing:1px}
-@keyframes startupOut{to{opacity:0;visibility:hidden}}
+/* V9.1 cinematic startup */
+.startup{position:fixed;z-index:100;inset:0;background:#000106;display:grid;place-items:center;padding:24px;overflow:hidden;color:var(--white)}
+.startup.hide{animation:startupOut .7s cubic-bezier(.22,.8,.25,1) forwards;pointer-events:none}
+.startup:before{content:"";position:absolute;inset:-35%;background:radial-gradient(ellipse at 50% 45%,#173a64 0,transparent 17%),radial-gradient(circle at 50% 50%,#4388ff12 0,transparent 42%);animation:startupGlow 3s ease-in-out infinite}
+.startup:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,#5de7ff05 48%,transparent 100%);background-size:100% 8px;mix-blend-mode:screen;opacity:.45;pointer-events:none}
+.startupgrid{position:absolute;inset:-25%;background-image:linear-gradient(#5de7ff08 1px,transparent 1px),linear-gradient(90deg,#5de7ff08 1px,transparent 1px);background-size:42px 42px;transform:perspective(520px) rotateX(62deg) translateY(22%);transform-origin:center bottom;animation:startGrid 3s linear infinite;opacity:.7}
+.startupVignette{position:absolute;inset:0;background:radial-gradient(circle at center,transparent 20%,#000 92%);pointer-events:none}
+.startupBeam{position:absolute;top:-25%;left:50%;width:1px;height:150%;background:linear-gradient(180deg,transparent,#5de7ff00 15%,#5de7ff66 50%,#5de7ff00 85%,transparent);box-shadow:0 0 30px #5de7ff22;transform:translateX(-50%) scaleY(.1);animation:beamIn 2.2s ease-out .15s forwards}
+.startupCore{position:relative;z-index:2;width:min(390px,90vw);text-align:center;color:var(--white);animation:coreIn 1.1s cubic-bezier(.2,.8,.2,1) both}
+.startupSigil{width:124px;height:124px;margin:0 auto 27px;display:grid;place-items:center;border:1px solid #5de7ff99;clip-path:polygon(50% 0,86% 14%,100% 50%,86% 86%,50% 100%,14% 86%,0 50%,14% 14%);background:linear-gradient(145deg,#071a31,#02050d);box-shadow:0 0 30px #5de7ff33,0 0 100px #4388ff18,inset 0 0 35px #5de7ff0b;animation:sigilIn 1.3s cubic-bezier(.2,.8,.2,1) both,sigilPulse 2.6s ease-in-out 1.1s infinite}
+.startupSigil:before{content:"✦";font-size:46px;color:var(--cyan);text-shadow:0 0 12px #5de7ff,0 0 34px #4388ff}
+.startupSigil:after{content:"";position:absolute;width:170px;height:170px;border:1px solid #5de7ff20;border-radius:50%;animation:orbit 4s linear infinite}
+.startupLabel{font-size:9px;letter-spacing:5px;color:#7fb9d7;font-weight:900;opacity:.9}
+.startupText{font-size:25px;letter-spacing:4px;font-weight:900;margin-top:13px;min-height:37px;text-shadow:0 0 18px #5de7ff55;transition:opacity .12s,transform .12s;white-space:nowrap}
+.startupText.flash{animation:textFlash .28s ease}
+.startupLine{width:0;height:1px;margin:18px auto 0;background:linear-gradient(90deg,transparent,#5de7ff,transparent);box-shadow:0 0 14px #5de7ff66;animation:lineGrow 1.6s .45s ease forwards}
+.startupSub{font-size:8px;letter-spacing:3px;color:#506988;margin-top:12px;opacity:.75}
+.startupSkip{position:absolute;z-index:4;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));padding:10px 13px;border:1px solid #315488;border-radius:9px;background:#06101dcc;color:#9bc5df;font-size:9px;font-weight:800;letter-spacing:1px;backdrop-filter:blur(8px)}
+@keyframes startGrid{to{background-position:0 42px,42px 0}}
+@keyframes startupGlow{50%{transform:scale(1.2);opacity:.72}}
+@keyframes beamIn{to{transform:translateX(-50%) scaleY(1);opacity:1}}
+@keyframes coreIn{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes sigilIn{from{opacity:0;transform:scale(.25) rotate(-35deg);filter:blur(8px)}to{opacity:1;transform:scale(1) rotate(0);filter:none}}
+@keyframes sigilPulse{50%{box-shadow:0 0 50px #5de7ff55,0 0 130px #4388ff30,inset 0 0 45px #5de7ff12}}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes textFlash{50%{opacity:.25;transform:scale(1.025);filter:blur(1px)}}
+@keyframes lineGrow{to{width:88%}}
+@keyframes startupOut{to{opacity:0;transform:scale(1.03);visibility:hidden}}
 /* identity */
 .identity{position:fixed;z-index:101;inset:0;background:radial-gradient(circle at 50% 25%,#123a63,#070b17 48%,#010207);display:none;place-items:center;padding:28px}.identity.show{display:grid}.identitybox{width:min(390px,100%);text-align:center}.identitybox .sys{margin-bottom:14px}.identitybox h2{font-size:26px;letter-spacing:3px;margin:0 0 18px}.identitybox input{font-size:16px;text-align:center;padding:15px 12px;border-color:#3c6598}.identityConfirm{display:none}.identityConfirm.show{display:block}.identityConfirm h2{color:var(--cyan);text-shadow:0 0 18px #5de7ff55}.identityName{font-size:29px;font-weight:900;margin:7px 0 18px}
 @media(max-width:390px){.choicegrid{grid-template-columns:1fr}.herochar{min-height:225px}.startupText{font-size:21px}.startupSigil{width:96px;height:96px}}
-
-.questMeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}.tag{font-size:8px;letter-spacing:1px;padding:3px 6px;border:1px solid #29466f;border-radius:6px;color:#8eb8d8}.tag.weekly{border-color:#73552a;color:#e8bd70}.tag.elite{border-color:#6f356e;color:#e5a1e5}.statProg{margin-top:7px;padding:10px;border:1px solid #1e3155;border-radius:10px;background:#070d19}.statProg .row{margin:4px 0}.miniBar{height:5px;background:#111a2b;border-radius:5px;overflow:hidden}.miniFill{height:100%;background:linear-gradient(90deg,#315f9c,#5de7ff);transition:width .4s ease}.levelFlash{position:fixed;z-index:30;inset:0;display:none;place-items:center;background:radial-gradient(circle,#12365ecc,#02040cf2 55%,#000);text-align:center}.levelFlash.show{display:grid;animation:flashIn .35s ease}.levelFlash .flashBox{animation:levelPulse 1.5s ease infinite}.levelFlash .sys{font-size:11px;letter-spacing:5px;color:#7fb9d7}.levelFlash h1{font-size:48px;letter-spacing:7px;margin:8px 0;color:#fff;text-shadow:0 0 30px #5de7ff}.levelFlash p{color:#a9bfd9;letter-spacing:2px}.flashTap{margin-top:24px;padding:11px 20px;border:1px solid #315488;border-radius:10px;background:#081426;color:#fff;font-weight:800}@keyframes flashIn{from{opacity:0}to{opacity:1}}@keyframes levelPulse{50%{transform:scale(1.035)}}
 </style>
 </head>
 <body>
@@ -96,10 +106,8 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 <div class="bar"><div id="xpFill" class="fill"></div></div><div class="row"><span id="xpText"></span><span id="levelText"></span></div>
 <div class="stats"><div class="stat"><b id="str">10</b><span>STRENGTH</span></div><div class="stat"><b id="int">10</b><span>INTELLIGENCE</span></div><div class="stat"><b id="dis">10</b><span>DISCIPLINE</span></div></div>
 </div>
-<div class="section"><b>DAILY QUESTS // 3</b><span id="questCount"></span></div>
+<div class="section"><b>SYSTEM TASKS</b><span id="questCount"></span></div>
 <div id="questList"></div>
-<div class="section"><b>WEEKLY QUESTS</b><span id="weeklyCount"></span></div>
-<div id="weeklyList"></div>
 <button class="btn" onclick="openCreate()">＋ CREATE SYSTEM TASK</button>
 <div class="section"><b>DAILY STREAK</b><span id="streakText"></span></div>
 <div class="panel"><div class="row"><span>Consecutive days with at least one completed task</span><strong id="streakBig" class="gold">0</strong></div></div>
@@ -111,7 +119,6 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 <div class="listrow"><span class="icon">⚔️</span><div class="grow"><b>Strength</b><div class="muted">Physical training & action</div></div><strong id="cstr">10</strong></div>
 <div class="listrow"><span class="icon">🧠</span><div class="grow"><b>Intelligence</b><div class="muted">Study & learning</div></div><strong id="cint">10</strong></div>
 <div class="listrow"><span class="icon">🔥</span><div class="grow"><b>Discipline</b><div class="muted">Consistency & difficult tasks</div></div><strong id="cdis">10</strong></div>
-<div class="statProg"><div class="sys">QUEST PROGRESS // NEXT STAT POINT</div><div class="row"><span>💪 PHYSICAL → STRENGTH</span><span id="progStr">0 / 6</span></div><div class="miniBar"><div id="fillStr" class="miniFill" style="width:0%"></div></div><div class="row"><span>🧠 KNOWLEDGE → INTELLIGENCE</span><span id="progInt">0 / 6</span></div><div class="miniBar"><div id="fillInt" class="miniFill" style="width:0%"></div></div><div class="row"><span>🔥 DISCIPLINE → DISCIPLINE</span><span id="progDis">0 / 6</span></div><div class="miniBar"><div id="fillDis" class="miniFill" style="width:0%"></div></div><div class="muted">Every 6 completed quests in a category grants +1 to that category's stat.</div></div>
 <div class="listrow"><span class="icon">🪙</span><div class="grow"><b>System Coins</b><div class="muted">Spend on personal rewards</div></div><strong id="coins">0</strong></div>
 <button class="btn secondary" onclick="openAssessment(true)">⚙️ RECALIBRATE SYSTEM PROFILE</button>
 </div>
@@ -137,11 +144,10 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 </nav>
 
 <div id="modal" class="modal"><div class="modalbox"><div class="sys">SYSTEM NOTIFICATION</div><h2 id="modalTitle"></h2><p id="modalText"></p><button onclick="closeModal()">CONTINUE</button></div></div>
-<div id="createModal" class="modal"><div class="modalbox"><div class="sys">NEW SYSTEM TASK</div><h2>CREATE QUEST</h2><label>Task name</label><input id="newName" placeholder="e.g. Study calculus"><label>XP reward (10–50)</label><input id="newXP" type="number" value="25" min="10" max="50"><label>Category</label><select id="newCategory"><option value="str">Physical → Strength</option><option value="int">Knowledge → Intelligence</option><option value="dis">Discipline → Discipline</option></select><button onclick="createTask()">ADD TO SYSTEM</button><button class="btn secondary" onclick="closeCreate()">CANCEL</button></div></div>
+<div id="createModal" class="modal"><div class="modalbox"><div class="sys">NEW SYSTEM TASK</div><h2>CREATE QUEST</h2><label>Task name</label><input id="newName" placeholder="e.g. Study calculus"><label>XP reward (10–500)</label><input id="newXP" type="number" value="50" min="10" max="500"><button onclick="createTask()">ADD TO SYSTEM</button><button class="btn secondary" onclick="closeCreate()">CANCEL</button></div></div>
 
 
 <div id="confirmModal" class="modal"><div class="modalbox"><div class="sys">SYSTEM TASK VERIFICATION</div><h2>IS THIS TASK COMPLETE?</h2><p id="confirmText"></p><div class="confirmBtns"><button onclick="confirmTask()">YES — COMPLETE</button><button onclick="cancelTask()">NOT YET</button></div></div></div>
-<div id="levelFlash" class="levelFlash"><div class="flashBox"><div class="sys">SYSTEM NOTIFICATION</div><h1>LEVEL UP</h1><p id="levelFlashText">LEVEL 2 ACHIEVED</p><button class="flashTap" onclick="closeLevelFlash()">CONTINUE</button></div></div>
 <div id="intro" class="intro"><div class="introbox"><div class="sigil glitch">✦</div><div class="sys">SYSTEM CONNECTION ESTABLISHED</div><h1>AWAKEN</h1><p>A system has appeared before you. It does not care who you were yesterday. It only measures what you do next.</p><button class="btn" onclick="finishIntro()">ACCEPT THE SYSTEM</button></div></div>
 <div id="assessment" class="assess"><div class="assessbox">
 <div class="sys">SYSTEM INITIAL ASSESSMENT</div><h2 id="assessTitle">IDENTIFY YOUR OBJECTIVES</h2><p id="assessPrompt">The System must understand what you want to improve before it can shape your quests.</p>
@@ -150,71 +156,33 @@ header:after{content:"";position:absolute;left:14px;right:14px;top:56px;height:1
 <div class="assessnav"><button id="assessBack" class="btn secondary" onclick="assessmentBack()">BACK</button><button id="assessNext" class="btn" onclick="assessmentNext()">CONTINUE</button></div>
 </div></div>
 
-<div id="startup" class="startup"><div class="startupgrid"></div><div class="startupCore"><div class="startupSigil"></div><div class="startupLabel">SYSTEM CONNECTION</div><div id="startupText" class="startupText">ESTABLISHING...</div><div class="startupLine"></div></div><button class="startupSkip" onclick="skipStartup()">TAP TO SKIP</button></div>
+<div id="startup" class="startup"><div class="startupgrid"></div><div class="startupBeam"></div><div class="startupVignette"></div><div class="startupCore"><div class="startupSigil"></div><div class="startupLabel">SYSTEM CONNECTION</div><div id="startupText" class="startupText">ESTABLISHING...</div><div class="startupLine"></div><div class="startupSub">LIFE-RPG // V9.1 // AWAKENING</div></div><button class="startupSkip" onclick="skipStartup()">TAP TO SKIP</button></div>
 <div id="identity" class="identity"><div class="identitybox"><div id="identityEntry"><div class="sys">SYSTEM IDENTIFICATION</div><h2>IDENTIFY YOURSELF</h2><input id="nameInput" maxlength="18" autocomplete="nickname" placeholder="Enter Name"><button class="btn" onclick="confirmIdentity()">CONFIRM IDENTITY</button></div><div id="identityConfirm" class="identityConfirm"><div class="sys">IDENTITY CONFIRMED</div><h2>Welcome</h2><div id="identityName" class="identityName"></div><button class="btn" onclick="finishIdentity()">CONTINUE</button></div></div></div>
 <script>
 const KEY="life-system-v1";
 const MILESTONES=[5,15,30,45];
-const CONFIG={
-  dailyQuestCount:3,
-  dailyXP:{easy:15,normal:25,hard:35,elite:50},
-  weeklyXP:{easy:50,normal:75,hard:90,elite:100},
-  statQuestRequirement:6,
-  progression:{baseXP:250,perLevel:50},
-  coinDivisor:5,
-  recentQuestMemory:12,
-  weeklyQuestCount:3
-};
-const starter=[];
-const QUEST_POOL={
-  str:[
-    ["System Training Protocol","Complete 20+ minutes of intentional exercise.","normal","🏋️"],
-    ["Strength Trial","Complete a strength workout or a focused physical session.","hard","⚔️"],
-    ["Movement Protocol","Take a purposeful 25-minute walk or equivalent activity.","easy","🚶"]
-  ],
-  int:[
-    ["Knowledge Acquisition","Complete 25 minutes of focused learning.","normal","🧠"],
-    ["Deep Study Protocol","Complete 45 minutes of focused study or skill practice.","hard","📚"],
-    ["Learning Spark","Learn one new concept and write down what you learned.","easy","💡"]
-  ],
-  dis:[
-    ["Discipline Trial","Complete one task you have been putting off.","normal","🔥"],
-    ["Willpower Protocol","Finish one planned task before entertainment.","hard","⚡"],
-    ["Order Reset","Spend 15 minutes restoring order to your space or schedule.","easy","📦"],
-    ["Sleep Protocol","Follow your planned bedtime routine tonight.","normal","😴"]
-  ]
-};
-const WEEKLY_POOL={
-  str:[["Weekly Training Trial","Complete 3 intentional physical sessions this week.","hard","🏋️"],["Weekly Movement Goal","Accumulate 120 minutes of intentional movement this week.","elite","⚔️"]],
-  int:[["Weekly Knowledge Trial","Complete 3 focused learning sessions this week.","hard","🧠"],["Weekly Mastery Session","Complete one 90-minute deep learning session this week.","elite","📚"]],
-  dis:[["Weekly Discipline Trial","Complete 5 planned tasks you would normally avoid this week.","hard","🔥"],["Weekly Order Protocol","Complete 3 meaningful organization or routine resets this week.","elite","📦"]]
-};
+const starter=[
+{id:1,name:"Complete a workout",desc:"Strength training or cardio",xp:100,stat:"str",emoji:"🏋️"},
+{id:2,name:"Study for 60 minutes",desc:"School, math, programming, or another skill",xp:100,stat:"int",emoji:"📚"},
+{id:3,name:"Reset your environment",desc:"Clean or organize for 15+ minutes",xp:50,stat:"dis",emoji:"🧹"},
+{id:4,name:"Hit your hydration goal",desc:"Complete your planned water target",xp:30,stat:"dis",emoji:"💧"},
+{id:5,name:"Protect your sleep",desc:"Get to bed at your target time",xp:75,stat:"dis",emoji:"😴"}];
 let pendingTask=null;
 let state=JSON.parse(localStorage.getItem(KEY)||"null");
-if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:[],dailyTasks:[],weeklyTasks:[],dailyDate:"",weeklyKey:"",completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:[],motivation:[],challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false},statProgress:{str:0,int:0,dis:0},recentQuestNames:[]};
-if(typeof state.nameSet==="undefined") state.nameSet=!!state.name;
-if(typeof state.introSeen==="undefined") state.introSeen=false;
-if(typeof state.assessmentSeen==="undefined") state.assessmentSeen=!!state.introSeen;
-if(!state.profile) state.profile={goals:[],objectives:[],state:"",time:"",obstacle:[],motivation:[],challenge:"",activity:"",primary:""};
-for(const k of ["goals","objectives","obstacle","motivation"]){if(!Array.isArray(state.profile[k]))state.profile[k]=state.profile[k]?[state.profile[k]]:[];}
-for(const k of ["state","time","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}
-if(!state.milestones) state.milestones={};
-MILESTONES.forEach(m=>{if(typeof state.milestones[m]!=="boolean")state.milestones[m]=state.level>=m;});
-if(!state.statProgress)state.statProgress={str:0,int:0,dis:0};
-for(const k of ["str","int","dis"]){state.statProgress[k]=Math.max(0,Number(state.statProgress[k])||0);}
-if(!Array.isArray(state.recentQuestNames))state.recentQuestNames=[];
-if(!Array.isArray(state.dailyTasks))state.dailyTasks=[];
-if(!Array.isArray(state.weeklyTasks))state.weeklyTasks=[];
-if(!Array.isArray(state.tasks))state.tasks=[];
-state.tasks=state.tasks.filter(t=>!t.systemGenerated&&!t.dailyGenerated&&!t.weekly);
-state.tasks.forEach(t=>{t.xp=Math.min(CONFIG.dailyXP.elite,Math.max(10,Number(t.xp)||25));t.stat=["str","int","dis"].includes(t.stat)?t.stat:"dis";t.custom=true;t.categoryName=categoryName(t.stat);});
+if(state && typeof state.introSeen==="undefined") state.introSeen=false;
+if(state && typeof state.nameSet==="undefined") state.nameSet=!!state.name;
+if(state && typeof state.assessmentSeen==="undefined") state.assessmentSeen=!!state.introSeen;
+if(state && !state.profile) state.profile={goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""};
+if(state && !state.milestones) state.milestones={};
+if(state && state.profile){state.profile.goals=Array.isArray(state.profile.goals)?state.profile.goals:[];state.profile.objectives=Array.isArray(state.profile.objectives)?state.profile.objectives:[];for(const k of ["state","time","challenge"]){if(typeof state.profile[k]!=="string")state.profile[k]="";}for(const k of ["obstacle","motivation"]){state.profile[k]=Array.isArray(state.profile[k])?state.profile[k]:(state.profile[k]?[state.profile[k]]:[]);}}
+if(state && state.milestones){ MILESTONES.forEach(m=>{ if(typeof state.milestones[m]!=="boolean") state.milestones[m]=state.level>=m; }); }
+if(!state) state={name:"",nameSet:false,xp:0,level:1,coins:0,stats:{str:10,int:10,dis:10},tasks:starter,completed:{},lastDay:null,streak:0,ach:[],introSeen:false,assessmentSeen:false,profile:{goals:[],objectives:[],state:"",time:"",obstacle:"",motivation:"",challenge:"",activity:"",primary:""},milestones:{5:false,15:false,30:false,45:false}};
 
 function today(){return new Date().toISOString().slice(0,10)}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-function xpNeeded(){return CONFIG.progression.baseXP + (state.level-1)*CONFIG.progression.perLevel}
+function xpNeeded(){return 500 + (state.level-1)*150}
 function rank(){return state.level>=30?"S":state.level>=20?"A":state.level>=12?"B":state.level>=7?"C":state.level>=3?"D":"E"}
 function completedToday(){return state.tasks.filter(t=>state.completed[t.id]===today()).length}
-function questDone(t){return state.completed[t.id]===(t.weekly?weekKey():today())}
 function render(){
 document.getElementById("playerName").textContent=state.name;
 document.getElementById("rank").textContent=rank()+"-RANK";
@@ -224,18 +192,21 @@ document.getElementById("xpFill").style.width=Math.min(100,state.xp/xpNeeded()*1
 for(const k of ["str","int","dis"]){document.getElementById(k).textContent=state.stats[k];document.getElementById("c"+k).textContent=state.stats[k]}
 document.getElementById("coins").textContent=state.coins.toLocaleString();
 document.getElementById("statusLevel").textContent="LEVEL "+state.level;
-let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
+let cls=state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold. The System recognizes you as an S-Rank existence."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete. Your class now reflects your growth."]:state.level>=5?["AWAKENED","⚡","The System has detected your hidden potential."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
 document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
-document.getElementById("questCount").textContent=state.dailyTasks.filter(questDone).length+" / "+CONFIG.dailyQuestCount+" CLEARED";
-document.getElementById("weeklyCount").textContent=state.weeklyTasks.filter(questDone).length+" / "+CONFIG.weeklyQuestCount+" CLEARED";
-document.getElementById("streakText").textContent=state.streak+" DAYS";document.getElementById("streakBig").textContent=state.streak;
-renderQuestList("questList",state.dailyTasks.concat(state.tasks||[]));renderQuestList("weeklyList",state.weeklyTasks);
-const sp=state.statProgress;
-for(const k of ["str","int","dis"]){document.getElementById("prog"+k.charAt(0).toUpperCase()+k.slice(1)).textContent=sp[k]+" / "+CONFIG.statQuestRequirement;document.getElementById("fill"+k.charAt(0).toUpperCase()+k.slice(1)).style.width=Math.min(100,sp[k]/CONFIG.statQuestRequirement*100)+"%";}
-const a=document.getElementById("achList");const achievements=[["FIRST AWAKENING","Complete your first quest",state.xp>0],["QUEST CLEARER","Clear 5 quests",Object.keys(state.completed).length>=5],["LEVEL 5","Reach Level 5",state.level>=5],["DISCIPLINE","Reach a 7-day streak",state.streak>=7],["EVOLVED","Reach Level 15",state.level>=15],["ASCENDED","Reach Level 30",state.level>=30],["SOVEREIGN","Reach Level 45",state.level>=45]];a.innerHTML=achievements.map(x=>`<div class="listrow"><span class="icon">${x[2]?"🏆":"🔒"}</span><div class="grow"><b>${x[0]}</b><div class="muted">${x[1]}</div></div><strong>${x[2]?"UNLOCKED":"LOCKED"}</strong></div>`).join("");
+document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
+document.getElementById("streakText").textContent=state.streak+" DAYS";
+document.getElementById("streakBig").textContent=state.streak;
+const q=document.getElementById("questList");q.innerHTML="";
+state.tasks.forEach(t=>{let done=state.completed[t.id]===today();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"Custom System Task")}</small></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>openConfirm(t);q.appendChild(el)});
+const a=document.getElementById("achList");const achievements=[
+["FIRST AWAKENING","Complete your first task","first",state.xp>0],
+["QUEST CLEARER","Clear 5 tasks","five",Object.keys(state.completed).length>=5],
+["LEVEL 5","Reach Level 5","l5",state.level>=5],
+["DISCIPLINE","Reach a 7-day streak","streak",state.streak>=7],
+["AWAKENED","Reach Level 5","l5a",state.level>=5],["EVOLVED","Reach Level 15","l15",state.level>=15],["ASCENDED","Reach Level 30","l30",state.level>=30],["SOVEREIGN","Reach Level 45","l45",state.level>=45]];
+a.innerHTML=achievements.map(x=>`<div class="listrow"><span class="icon">${x[3]?"🏆":"🔒"}</span><div class="grow"><b>${x[0]}</b><div class="muted">${x[1]}</div></div><strong>${x[3]?"UNLOCKED":"LOCKED"}</strong></div>`).join("");
 }
-function renderQuestList(id,tasks){const q=document.getElementById(id);q.innerHTML="";tasks.forEach(t=>{const done=questDone(t);const weekly=t.weekly===true;const difficulty=(t.difficulty||"normal").toUpperCase();let el=document.createElement("div");el.className="quest "+(done?"done":"");el.innerHTML=`<div class="check">${done?"✓":""}</div><div class="q"><strong>${t.emoji||"◆"} ${esc(t.name)}</strong><small>${esc(t.desc||"System Quest")}</small><div class="questMeta"><span class="tag">${(t.categoryName||categoryName(t.stat)).toUpperCase()}</span><span class="tag ${weekly?"weekly":""}">${weekly?"WEEKLY":"DAILY"}</span><span class="tag ${difficulty==="ELITE"?"elite":""}">${difficulty}</span></div></div><div class="reward">+${t.xp} XP</div>`;if(!done)el.onclick=()=>openConfirm(t);q.appendChild(el)});}
-function categoryName(stat){return stat==="str"?"Physical":stat==="int"?"Knowledge":"Discipline"}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function openConfirm(t){
   pendingTask=t;
@@ -260,7 +231,7 @@ function hideStartup(){const el=document.getElementById("startup");if(!el.classL
 function showIdentity(){document.getElementById("identity").classList.add("show");document.getElementById("nameInput").focus();}
 function confirmIdentity(){const input=document.getElementById("nameInput"),name=input.value.trim().replace(/\s+/g," ");if(!name){show("SYSTEM INPUT REQUIRED","Enter a name before continuing.");return;}state.name=name;state.nameSet=true;save();document.getElementById("identityEntry").style.display="none";document.getElementById("identityConfirm").classList.add("show");document.getElementById("identityName").textContent=name;}
 function finishIdentity(){document.getElementById("identity").classList.remove("show");document.getElementById("intro").classList.add("show");}
-function runStartup(){const el=document.getElementById("startup"),txt=document.getElementById("startupText");const lines=["ESTABLISHING...","SIGNAL DETECTED","PLAYER RECOGNIZED","SYSTEM ONLINE"];let i=0;txt.textContent=lines[0];const timer=setInterval(()=>{i++;if(i>=lines.length){clearInterval(timer);setTimeout(()=>{if(!startupSkipped)hideStartup()},450);return}txt.style.opacity="0";setTimeout(()=>{txt.textContent=lines[i];txt.style.opacity="1"},130)},650);}
+function runStartup(){const el=document.getElementById("startup"),txt=document.getElementById("startupText");const lines=["ESTABLISHING...","SIGNAL DETECTED","PLAYER RECOGNIZED","SYSTEM ONLINE"];let i=0;txt.textContent=lines[0];const timer=setInterval(()=>{i++;if(i>=lines.length){clearInterval(timer);setTimeout(()=>{if(!startupSkipped)hideStartup()},520);return}txt.classList.remove("flash");txt.style.opacity="0";txt.style.transform="translateY(4px)";setTimeout(()=>{txt.textContent=lines[i];txt.style.opacity="1";txt.style.transform="translateY(0)";txt.classList.add("flash")},120)},700);}
 function finishIntro(){
   state.introSeen=true;
   save();
@@ -326,20 +297,26 @@ function renderAssessment(){
  setTimeout(()=>{const box=document.querySelector('.assessbox');const cue=document.getElementById('scrollCue');if(box&&cue)cue.classList.toggle('show',box.scrollHeight>box.clientHeight+8);},30);
 }
 function selectAssessment(i){const d=assessmentData[assessStep],opts=getAssessmentOptions(),v=opts[i][1];if(d.type==="multi"){let a=Array.isArray(state.profile[d.key])?state.profile[d.key]:[];if(d.key==="objectives"&&v==="All Paths"){a=a.includes(v)?a.filter(x=>x!==v):[...a.filter(x=>x!=="All Paths"),v];}else if(d.key==="objectives"&&a.includes("All Paths")){a=[v];}else if(a.includes(v)){a=a.filter(x=>x!==v);}else{if(d.max&&a.length>=d.max){show("SELECTION LIMIT","Choose up to "+d.max+" options.");return;}a=[...a,v];}state.profile[d.key]=a;}else state.profile[d.key]=v;save();renderAssessment();}
-function questScore(stat){const p=state.profile||{};const tags=[...(p.goals||[]),...(p.objectives||[])];let score=0;if(stat==="str"&&(tags.includes("Fitness")||tags.includes("Vitality")||tags.includes("Physical Ascension")))score+=5;if(stat==="int"&&(tags.includes("Knowledge")||tags.includes("Career")||tags.includes("Finance")||tags.includes("Mastery")||tags.includes("Knowledge Acquisition")||tags.includes("Career Advancement")||tags.includes("Financial Ascension")||tags.includes("Mastery Pursuit")))score+=5;if(stat==="dis"&&(tags.includes("Discipline")||tags.includes("Order")||tags.includes("Sleep")||tags.includes("Productivity")||tags.includes("Discipline")))score+=5;score+=state.statProgress[stat]*2;if((p.challenge||"")==="Pressure")score+=1;if((p.challenge||"")==="Limit Break")score+=2;return score;}
-function makeQuest(stat,raw,weekly=false){const [name,desc,diff,emoji]=raw;const xp=weekly?CONFIG.weeklyXP[diff]:CONFIG.dailyXP[diff];return{id:(weekly?"weekly-":"daily-")+Date.now()+"-"+Math.random().toString(36).slice(2,7),name,desc,xp,stat,emoji,difficulty:diff,weekly,systemGenerated:true,categoryName:categoryName(stat)};}
-function weightedCategoryOrder(){const cats=["str","int","dis"];return cats.sort((a,b)=>questScore(b)-questScore(a));}
-function pickQuest(stat,weekly=false,used=new Set()){const pool=weekly?(WEEKLY_POOL[stat]||[]):(QUEST_POOL[stat]||[]);const recent=new Set(state.recentQuestNames||[]);const options=pool.filter(x=>!used.has(x[0])&&!recent.has(x[0]));const list=options.length?options:pool.filter(x=>!used.has(x[0]));if(!list.length)return null;const raw=list[Math.floor(Math.random()*list.length)];used.add(raw[0]);return makeQuest(stat,raw,weekly);}
-function applyProfileQuests(force=false){const todayKey=today();if(!force&&state.dailyDate===todayKey&&state.dailyTasks.length===CONFIG.dailyQuestCount)return;state.dailyTasks=[];const used=new Set();const order=weightedCategoryOrder();
-// Guarantee category variety when possible, then fill the final slot based on profile/progress.
-for(let i=0;i<Math.min(CONFIG.dailyQuestCount,order.length);i++){const q=pickQuest(order[i],false,used);if(q)state.dailyTasks.push(q);}
-while(state.dailyTasks.length<CONFIG.dailyQuestCount){const q=pickQuest(order[state.dailyTasks.length%order.length],false,used);if(q)state.dailyTasks.push(q);else break;}
-state.dailyDate=todayKey;state.recentQuestNames=[...state.dailyTasks.map(q=>q.name),...(state.recentQuestNames||[])].slice(0,CONFIG.recentQuestMemory);
+function applyProfileQuests(){
+  const p=state.profile||{};
+  const goals=Array.isArray(p.goals)?p.goals:[];
+  const objectives=Array.isArray(p.objectives)?p.objectives:[];
+  const tags=[...goals,...objectives];
+  const has=x=>tags.includes(x)||objectives.includes("All Paths");
+  const generated=[];
+  if(has("Fitness")||has("Physical Ascension")) generated.push({name:"System Training Protocol",desc:"Complete 30+ minutes of intentional exercise.",xp:90,stat:"str",emoji:"⚔️"});
+  if(has("Knowledge")||has("Knowledge Acquisition")) generated.push({name:"Knowledge Acquisition",desc:"Complete 30 minutes of focused learning.",xp:90,stat:"int",emoji:"🧠"});
+  if(has("Discipline")||has("Discipline")) generated.push({name:"Discipline Trial",desc:"Complete one task you have been putting off.",xp:80,stat:"dis",emoji:"🔥"});
+  if(has("Order")||has("Productivity")) generated.push({name:"Environment Reset",desc:"Spend 15 minutes organizing your space or schedule.",xp:60,stat:"dis",emoji:"📦"});
+  if(has("Sleep")) generated.push({name:"Sleep Protocol",desc:"Follow your planned bedtime routine tonight.",xp:70,stat:"dis",emoji:"😴"});
+  if(has("Career")||has("Career Advancement")) generated.push({name:"Career Progression",desc:"Spend 30 minutes on a career-building action.",xp:90,stat:"int",emoji:"⚔️"});
+  if(has("Finance")||has("Financial Ascension")) generated.push({name:"Financial Checkpoint",desc:"Spend 15 minutes reviewing or improving your finances.",xp:80,stat:"int",emoji:"💰"});
+  if(has("Mastery")||has("Mastery Pursuit")) generated.push({name:"Mastery Session",desc:"Practice a hobby or personal skill for 30 minutes.",xp:80,stat:"int",emoji:"🏆"});
+  if(!generated.length) generated.push({name:"System Initiation",desc:"Complete one meaningful action toward your goals today.",xp:75,stat:"dis",emoji:"✦"});
+  const existing=state.tasks.map(t=>t.name);
+  generated.slice(0,5).forEach(t=>{if(!existing.includes(t.name))state.tasks.push({id:"sys-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),...t,systemGenerated:true});});
 }
-function weekKey(){const d=new Date();const first=new Date(d.getFullYear(),0,1);return d.getFullYear()+"-W"+Math.ceil((((d-first)/86400000)+first.getDay()+1)/7);}
-function applyWeeklyQuests(force=false){const wk=weekKey();if(!force&&state.weeklyKey===wk&&state.weeklyTasks.length===CONFIG.weeklyQuestCount)return;state.weeklyTasks=[];const used=new Set();const order=weightedCategoryOrder();for(let i=0;i<CONFIG.weeklyQuestCount;i++){const stat=order[i%order.length];const q=pickQuest(stat,true,used);if(q)state.weeklyTasks.push(q);}state.weeklyKey=wk;}
-function ensureQuests(){applyProfileQuests(false);applyWeeklyQuests(false);save();}
-function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests(true);applyWeeklyQuests(true);save();document.getElementById("assessment").classList.remove("show");render();tab("home",document.querySelectorAll(".bottom button")[0]);show("SYSTEM INITIALIZED","Your profile is online. The System has generated 3 daily quests and 3 weekly quests based on your current progression.");}
+function assessmentNext(){const d=assessmentData[assessStep],v=state.profile[d.key];if(!v||(Array.isArray(v)&&!v.length)){show("SYSTEM INPUT REQUIRED","Choose at least one option before continuing.");return}if(assessStep<assessmentData.length-1){assessStep++;renderAssessment();return}state.assessmentSeen=true;applyProfileQuests();save();document.getElementById("assessment").classList.remove("show");render();tab("home",document.querySelectorAll(".bottom button")[0]);show("SYSTEM INITIALIZED","Your profile is online. The System has generated your first personalized quests.");}
 function assessmentBack(){if(assessStep>0){assessStep--;renderAssessment();}}
 function milestoneEvent(level){
   const events={
@@ -353,30 +330,27 @@ function milestoneEvent(level){
   show(e[0],e[1]);
   setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),700);
 }
-function awardStatProgress(t){const stat=t.stat||"dis";if(!["str","int","dis"].includes(stat))return null;state.statProgress[stat]=(state.statProgress[stat]||0)+1;if(state.statProgress[stat]>=CONFIG.statQuestRequirement){state.statProgress[stat]-=CONFIG.statQuestRequirement;state.stats[stat]++;return stat;}return null;}
-function showLevelFlash(level){document.getElementById("levelFlashText").textContent="LEVEL "+level+" ACHIEVED";document.getElementById("levelFlash").classList.add("show");}
-function closeLevelFlash(){document.getElementById("levelFlash").classList.remove("show");}
 function complete(t){
-if(questDone(t))return;
-const oldLevel=state.level;state.completed[t.id]=t.weekly?weekKey():today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/CONFIG.coinDivisor));
-const statUp=awardStatProgress(t);
-const prev=state.lastDay,d=today();if(!t.weekly&&prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
-while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++;}
-save();render();
-const reached=MILESTONES.find(m=>m>oldLevel&&state.level>=m&&!state.milestones[m]);
-if(reached){milestoneEvent(reached);return;}
-if(state.level>oldLevel){showLevelFlash(state.level);return;}
-if(statUp){show("STAT INCREASE",""+categoryName(statUp).toUpperCase()+" +1\n\n"+CONFIG.statQuestRequirement+" "+categoryName(statUp)+" quests completed. Your base stat has increased.");}
-else show("QUEST CLEARED","+"+t.xp+" XP  •  +"+Math.max(1,Math.round(t.xp/CONFIG.coinDivisor))+" 🪙");
+if(state.completed[t.id]===today())return;
+const oldLevel=state.level; state.completed[t.id]=today();state.xp+=Number(t.xp);state.coins+=Math.max(1,Math.round(t.xp/5));state.stats[t.stat||"dis"]++;
+const prev=state.lastDay;const d=today();if(prev!==d){let y=new Date();y.setDate(y.getDate()-1);let yd=y.toISOString().slice(0,10);state.streak=(prev===yd)?state.streak+1:1;state.lastDay=d}
+while(state.xp>=xpNeeded()){state.xp-=xpNeeded();state.level++}
+save();render();if(!state.introSeen)document.getElementById("intro").classList.add("show");
+const reached=MILESTONES.find(m=>m>oldLevel && state.level>=m && !state.milestones[m]);
+if(reached){ milestoneEvent(reached); return; }
+if(state.level>oldLevel){
+  show("LEVEL UP","LEVEL "+state.level+" ACHIEVED. Your character status has evolved.");
+  setTimeout(()=>tab("character",document.querySelectorAll(".bottom button")[1]),650);
 }
-function createTask(){let n=document.getElementById("newName").value.trim();let x=Math.max(10,Math.min(CONFIG.dailyXP.elite,Number(document.getElementById("newXP").value)||25));let stat=document.getElementById("newCategory").value;if(!n)return;let id=Date.now();state.tasks.push({id,name:n,desc:"Custom System Task",xp:x,stat,emoji:"⚔️",custom:true,categoryName:categoryName(stat)});save();closeCreate();render();show("SYSTEM TASK ADDED",n+" has been added to your personal quest list.");}
+else show("QUEST CLEARED","+"+t.xp+" XP  •  +"+Math.max(1,Math.round(t.xp/5))+" 🪙");
+}
+function createTask(){let n=document.getElementById("newName").value.trim();let x=Math.max(10,Math.min(500,Number(document.getElementById("newXP").value)||50));if(!n)return;let id=Date.now();state.tasks.push({id,name:n,desc:"Custom System Task",xp:x,stat:"dis",emoji:"⚔️"});save();closeCreate();render();show("SYSTEM TASK ADDED",n+" has been added to today's System.")}
 function buy(cost,item){if(state.coins<cost){show("INSUFFICIENT COINS","The System denies this purchase. Earn more coins first.");return}state.coins-=cost;save();render();show("REWARD CLAIMED","Redeemed: "+item+". Enjoy it without guilt.");}
 function tab(id,btn){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".bottom button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
 function show(t,p){document.getElementById("modalTitle").textContent=t;document.getElementById("modalText").textContent=p;document.getElementById("modal").classList.add("show")}
 function closeModal(){document.getElementById("modal").classList.remove("show")}
 function openCreate(){document.getElementById("createModal").classList.add("show")}
 function closeCreate(){document.getElementById("createModal").classList.remove("show")}
-ensureQuests();
 render();
 runStartup();
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
