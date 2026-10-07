@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050713">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>THE SYSTEM // V9.4</title>
+<title>THE SYSTEM // V9.5</title>
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box} :root{--bg:#03050c;--panel:#0a1020;--line:#263b69;--cyan:#5de7ff;--blue:#4388ff;--purple:#a46bff;--white:#edf7ff;--muted:#8495b7;--gold:#ffd56b;--green:#5df2ae;--danger:#ff5579}
@@ -233,8 +233,6 @@ document.getElementById("levelText").textContent="LV. "+state.level;
 document.getElementById("xpText").textContent=state.xp+" / "+xpNeeded()+" XP";
 document.getElementById("xpFill").style.width=Math.min(100,state.xp/xpNeeded()*100)+"%";
 for(const k of ["str","int","dis"]){document.getElementById(k).textContent=state.stats[k];document.getElementById("c"+k).textContent=state.stats[k]}
-document.getElementById("coins").textContent=state.coins.toLocaleString();
-document.getElementById("statusLevel").textContent="LEVEL "+state.level;
 document.getElementById("charPlayerName").textContent=state.name||"PLAYER";
 document.getElementById("charRank").textContent=rank()+"-RANK";
 document.getElementById("charLevelText").textContent="LEVEL "+state.level;
@@ -245,7 +243,7 @@ document.getElementById("classSelectBtn").style.display=(state.level>=5&&!state.
 
 const CLASS_DATA={vanguard:["VANGUARD","⚔️","Strength-focused path."],arcanist:["ARCANIST","🔷","Intelligence-focused path."],willforged:["WILLFORGED","🔥","Discipline-focused path."],ascendant:["ASCENDANT","✦","Balanced path."]};
 let cls=state.classId&&CLASS_DATA[state.classId]?CLASS_DATA[state.classId]:state.level>=45?["SYSTEM SOVEREIGN","👑","You have surpassed the final threshold."]:state.level>=30?["ASCENDED HUNTER","🌌","Your awakened power has evolved beyond normal limits."]:state.level>=15?["ELITE AWAKENED","🔥","Your first evolution is complete."]:state.level>=5?["AWAKENING AVAILABLE","⚡","Choose your class to begin your awakening."]:["UNAWAKENED","⚔️","Your true class has not yet been revealed."];
-document.getElementById("className").textContent=cls[0];document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
+document.getElementById("avatar").textContent=cls[1];document.getElementById("classDesc").textContent=cls[2];
 document.getElementById("questCount").textContent=completedToday()+" / "+state.tasks.length+" CLEARED";
 document.getElementById("streakText").textContent=state.streak+" DAYS";
 document.getElementById("streakBig").textContent=state.streak;
